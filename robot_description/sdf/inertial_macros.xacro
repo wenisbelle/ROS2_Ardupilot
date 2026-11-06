@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!-- SDF inertial blocks (pose is relative to the link frame) -->
+<sdf version="1.9" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- Explicit principal moments -->
+  <xacro:macro name="inertial_diag" params="mass ixx iyy izz xyz:='0 0 0'">
+    <inertial>
+      <pose>${xyz} 0 0 0</pose>
+      <mass>${mass}</mass>
+      <inertia>
+        <ixx>${ixx}</ixx>
+        <ixy>0</ixy>
+        <ixz>0</ixz>
+        <iyy>${iyy}</iyy>
+        <iyz>0</iyz>
+        <izz>${izz}</izz>
+      </inertia>
+    </inertial>
+  </xacro:macro>
+
+  <!-- Solid box -->
+  <xacro:macro name="inertial_box" params="mass x y z xyz:='0 0 0'">
+    <xacro:inertial_diag mass="${mass}" xyz="${xyz}"
+                         ixx="${mass * (y*y + z*z) / 12.0}"
+                         iyy="${mass * (x*x + z*z) / 12.0}"
+                         izz="${mass * (x*x + y*y) / 12.0}"/>
+  </xacro:macro>
+
+  <!-- Solid cylinder along z -->
+  <xacro:macro name="inertial_cylinder" params="mass radius length xyz:='0 0 0'">
+    <xacro:inertial_diag mass="${mass}" xyz="${xyz}"
+                         ixx="${mass * (3*radius*radius + length*length) / 12.0}"
+                         iyy="${mass * (3*radius*radius + length*length) / 12.0}"
+                         izz="${mass * radius * radius / 2.0}"/>
+  </xacro:macro>
+
+</sdf>

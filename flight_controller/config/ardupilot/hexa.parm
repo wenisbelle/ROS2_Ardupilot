@@ -1,0 +1,29 @@
+# =============================================================================
+# Large hexa X (robot_description/sdf/frame_hexa.xacro)
+#   hexa X, 6.0 kg, 960 mm, 15" props, T/W ~2.0, hover ~0.54 (linearised thrust)
+# Bigger inertia and slower motors than the X500: higher gains, lower
+# accelerations. Tune the real airframe (AutoTune / QuikTune).
+# =============================================================================
+FRAME_CLASS      2
+FRAME_TYPE       1
+
+MOT_THST_HOVER   0.54
+MOT_SPIN_ARM     0.10
+MOT_SPIN_MIN     0.15
+
+# Rate controller (tuned in this simulation)
+ATC_RAT_RLL_P    0.35
+ATC_RAT_RLL_I    0.35
+ATC_RAT_RLL_D    0.012
+ATC_RAT_PIT_P    0.35
+ATC_RAT_PIT_I    0.35
+ATC_RAT_PIT_D    0.012
+ATC_RAT_YAW_P    1.20
+ATC_RAT_YAW_I    0.12
+# max attitude accelerations, deg/s/s (4.6: ATC_ACCEL_*_MAX in cdeg/s/s)
+ATC_ACC_R_MAX    720
+ATC_ACC_P_MAX    720
+ATC_ACC_Y_MAX    90
+
+# Heavier vehicle: gentler navigation (m/s/s)
+WP_ACC           2.0

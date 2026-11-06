@@ -1,0 +1,5 @@
+# ArduPilot flight mode: GUIDED, LOITER, POSHOLD, ALT_HOLD, STABILIZE, RTL, LAND, BRAKE, AUTO, SMART_RTL...
+string mode
+---
+bool success
+string message

@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<!-- =========================================================================
+  RGB camera for vision / AI (fixed mount, tilted down by `pitch` [rad]).
+  gz topics: <name>/camera/image and <name>/camera/camera_info
+  (bridged to ROS as /<name>/camera/image_raw and /<name>/camera/camera_info)
+  Image frame_id: <name>/camera_optical_frame (static TF published by
+  drone_bringup: <name>/base_link -> <name>/camera_link -> optical frame)
+  ========================================================================= -->
+<sdf version="1.9" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:macro name="camera" params="name x y z pitch width:=640 height:=480 hfov:=1.204 rate:=30">
+    <link name="camera_link">
+      <pose>${x} ${y} ${z} 0 ${pitch} 0</pose>
+      <xacro:inertial_box mass="0.05" x="0.03" y="0.06" z="0.04"/>
+      <visual name="camera_body_visual">
+        <geometry>
+          <box>
+            <size>0.03 0.06 0.04</size>
+          </box>
+        </geometry>
+        <xacro:material_rgb r="0.1" g="0.1" b="0.1"/>
+      </visual>
+      <visual name="camera_lens_visual">
+        <pose>0.018 0 0 0 1.5708 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.012</radius>
+            <length>0.008</length>
+          </cylinder>
+        </geometry>
+        <xacro:material_rgb r="0.2" g="0.2" b="0.35" metal="0.8" rough="0.1"/>
+      </visual>
+      <sensor name="camera" type="camera">
+        <gz_frame_id>${name}/camera_optical_frame</gz_frame_id>
+        <always_on>1</always_on>
+        <update_rate>${rate}</update_rate>
+        <visualize>false</visualize>
+        <topic>${name}/camera/image</topic>
+        <camera>
+          <horizontal_fov>${hfov}</horizontal_fov>
+          <image>
+            <width>${width}</width>
+            <height>${height}</height>
+            <format>R8G8B8</format>
+          </image>
+          <clip>
+            <near>0.05</near>
+            <far>1000</far>
+          </clip>
+          <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.005</stddev>
+          </noise>
+        </camera>
+      </sensor>
+    </link>
+
+    <joint name="camera_joint" type="fixed">
+      <parent>base_link</parent>
+      <child>camera_link</child>
+    </joint>
+  </xacro:macro>
+
+</sdf>

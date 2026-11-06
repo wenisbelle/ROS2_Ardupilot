@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>drone_control</name>
+  <version>0.1.0</version>
+  <description>High level drone interface (drone_commander) between ROS 2 and ArduPilot through MAVROS: velocity / position / global targets in GUIDED mode, takeoff / land / RTL services, state and TF. CLI and keyboard teleop.</description>
+  <maintainer email="marinathonda@gmail.com">wenis</maintainer>
+  <license>BSD-3-Clause</license>
+
+  <exec_depend>rclpy</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+  <exec_depend>std_srvs</exec_depend>
+  <exec_depend>geometry_msgs</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
+  <exec_depend>mavros_msgs</exec_depend>
+  <exec_depend>tf2_ros</exec_depend>
+  <exec_depend>drone_interfaces</exec_depend>
+
+  <test_depend>ament_copyright</test_depend>
+  <test_depend>ament_flake8</test_depend>
+  <test_depend>ament_pep257</test_depend>
+  <test_depend>python3-pytest</test_depend>
+
+  <export>
+    <build_type>ament_python</build_type>
+  </export>
+</package>

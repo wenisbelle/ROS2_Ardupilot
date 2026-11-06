@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>drone_bringup</name>
+  <version>0.1.0</version>
+  <description>Launch files of the ArduPilot drone swarm: one simulated drone per terminal, the whole swarm, the ground station (Zenoh router, monitor, RViz, QGC) and the real drone (companion computer). Zenoh bridge configuration.</description>
+  <maintainer email="marinathonda@gmail.com">wenis</maintainer>
+  <license>BSD-3-Clause</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <exec_depend>robot_description</exec_depend>
+  <exec_depend>robot_gazebo</exec_depend>
+  <exec_depend>flight_controller</exec_depend>
+  <exec_depend>drone_interfaces</exec_depend>
+  <exec_depend>drone_control</exec_depend>
+  <exec_depend>swarm_control</exec_depend>
+  <exec_depend>tf2_ros</exec_depend>
+  <exec_depend>rviz2</exec_depend>
+  <exec_depend>python3-yaml</exec_depend>
+
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

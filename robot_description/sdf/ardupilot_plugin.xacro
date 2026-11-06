@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<!-- =========================================================================
+  ArduPilotPlugin (ardupilot_gazebo): the link between Gazebo and ArduPilot SITL.
+
+  - SITL sends the servo outputs (PWM) by UDP (JSON backend) to fdm_port_in
+    = 9002 + 10 * instance; the plugin answers with IMU + pose + velocity.
+  - lock_step: Gazebo and SITL advance together (deterministic, no drift
+    even when the real time factor drops with many drones).
+  - Each motor channel: PWM [servo_min, servo_max] -> [0, 1] * multiplier
+    = rotor velocity target [rad/s] (sign = turning direction), tracked by a
+    PID that applies torque on the rotor joint (limited to +-motor_torque_max).
+    The PID gain and torque limit set the motor response time
+    (tau ~ rotor_izz / motor_p_gain).
+  Properties from the frame file: motor_max_speed motor_p_gain motor_torque_max
+  ========================================================================= -->
+<sdf version="1.9" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:macro name="ap_motor" params="channel index dir">
+    <control channel="${channel}">
+      <jointName>rotor_${index}_joint</jointName>
+      <useForce>1</useForce>
+      <multiplier>${dir * motor_max_speed}</multiplier>
+      <offset>0</offset>
+      <servo_min>1100</servo_min>
+      <servo_max>1900</servo_max>
+      <type>VELOCITY</type>
+      <p_gain>${motor_p_gain}</p_gain>
+      <i_gain>0</i_gain>
+      <d_gain>0</d_gain>
+      <i_max>0</i_max>
+      <i_min>0</i_min>
+      <cmd_max>${motor_torque_max}</cmd_max>
+      <cmd_min>${-motor_torque_max}</cmd_min>
+      <controlVelocitySlowdownSim>1</controlVelocitySlowdownSim>
+    </control>
+  </xacro:macro>
+
+  <!-- The motor channels (<xacro:ap_motor .../>) are passed as a block -->
+  <xacro:macro name="ardupilot_plugin" params="fdm_port_in **motors">
+    <plugin name="ArduPilotPlugin" filename="ArduPilotPlugin">
+      <!-- Port settings -->
+      <fdm_addr>127.0.0.1</fdm_addr>
+      <fdm_port_in>${fdm_port_in}</fdm_port_in>
+      <connectionTimeoutMaxCount>5</connectionTimeoutMaxCount>
+      <lock_step>1</lock_step>
+      <!-- time sync ON: SITL follows the Gazebo step (1 kHz) and keeps the real EKF3.
+           With no_time_sync=1 (plugin default) SITL switches AHRS_EKF_TYPE to 10
+           (perfect simulated attitude / position), which hides estimation errors -->
+      <no_time_sync>0</no_time_sync>
+      <have_32_channels>0</have_32_channels>
+
+      <!-- Frame conventions: model FLU -> ArduPilot FRD ; Gazebo world ENU -> NED -->
+      <modelXYZToAirplaneXForwardZDown degrees="true">0 0 0 180 0 0</modelXYZToAirplaneXForwardZDown>
+      <gazeboXYZToNED degrees="true">0 0 0 180 0 90</gazeboXYZToNED>
+
+      <!-- Sensors -->
+      <imuName>imu_link::imu_sensor</imuName>
+
+      <xacro:insert_block name="motors"/>
+    </plugin>
+  </xacro:macro>
+
+</sdf>

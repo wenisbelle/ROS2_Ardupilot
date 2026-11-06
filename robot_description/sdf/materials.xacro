@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!-- SDF materials (PBR) used by the primitive visuals -->
+<sdf version="1.9" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:macro name="material_rgb" params="r g b metal:=0.3 rough:=0.5">
+    <material>
+      <ambient>${r} ${g} ${b} 1</ambient>
+      <diffuse>${r} ${g} ${b} 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <pbr>
+        <metal>
+          <metalness>${metal}</metalness>
+          <roughness>${rough}</roughness>
+        </metal>
+      </pbr>
+    </material>
+  </xacro:macro>
+
+  <xacro:macro name="material_carbon">
+    <xacro:material_rgb r="0.06" g="0.06" b="0.07" metal="0.4" rough="0.35"/>
+  </xacro:macro>
+
+  <xacro:macro name="material_aluminium">
+    <xacro:material_rgb r="0.55" g="0.55" b="0.58" metal="0.8" rough="0.3"/>
+  </xacro:macro>
+
+  <xacro:macro name="material_front">
+    <xacro:material_rgb r="0.85" g="0.08" b="0.05" metal="0.1" rough="0.6"/>
+  </xacro:macro>
+
+  <xacro:macro name="material_back">
+    <xacro:material_rgb r="0.95" g="0.95" b="0.95" metal="0.1" rough="0.6"/>
+  </xacro:macro>
+
+  <xacro:macro name="material_battery">
+    <xacro:material_rgb r="0.15" g="0.25" b="0.55" metal="0.1" rough="0.7"/>
+  </xacro:macro>
+
+  <xacro:macro name="material_gps">
+    <xacro:material_rgb r="0.85" g="0.85" b="0.2" metal="0.1" rough="0.6"/>
+  </xacro:macro>
+
+</sdf>

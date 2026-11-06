@@ -1,0 +1,87 @@
+////
+//// Zenoh bridge (zenoh-bridge-ros2dds) configuration shared by the drones and the GCS.
+////
+//// Every drone runs its own DDS domain (ROS_DOMAIN_ID = drone id), like separate
+//// computers. One bridge per drone links its domain to the Zenoh network (the
+//// "radio"): only the interfaces allowed below leave / enter the drone.
+//// The launch files set on the command line: <mode> -d <domain> -e <connect> -l <listen>
+////   GCS    : zenoh-bridge-ros2dds router -l tcp/0.0.0.0:7447
+////   drones : zenoh-bridge-ros2dds peer   -e tcp/<gcs>:7447 -l tcp/<own ip>:<port>  (peers also connect to each other)
+////
+//// Topic names are NOT changed by the bridge: the drone nodes already live in
+//// /<name>/..., so /drone1/state is /drone1/state in every domain.
+////
+{
+  plugins: {
+    ros2dds: {
+      nodename: "zenoh_bridge_ros2dds",
+
+      ////
+      //// allow: regular expressions matching the FULL interface names. Everything
+      //// else stays inside the drone (MAVROS raw topics, camera, TF, /clock...).
+      //// To share more (e.g. object detections) add them here, e.g.
+      ////   publishers / subscribers: "/[^/]+/detections"
+      //// Images over the radio are heavy: prefer compressed images or detections.
+      ////
+      allow: {
+        publishers: [
+          "/[^/]+/(state|pose)",
+          "/[^/]+/cmd/(velocity|position|global)",
+          "/[^/]+/swarm/.*",
+          "/swarm/.*",
+        ],
+        subscribers: [
+          "/[^/]+/(state|pose)",
+          "/[^/]+/cmd/(velocity|position|global)",
+          "/[^/]+/swarm/.*",
+          "/swarm/.*",
+        ],
+        service_servers: [
+          "/[^/]+/(takeoff|land|rtl|hold|arm|set_mode)",
+          "/[^/]+/swarm/.*",
+        ],
+        service_clients: [
+          "/[^/]+/(takeoff|land|rtl|hold|arm|set_mode)",
+          "/[^/]+/swarm/.*",
+        ],
+        action_servers: [
+          "/[^/]+/swarm/.*",
+        ],
+        action_clients: [
+          "/[^/]+/swarm/.*",
+        ],
+      },
+
+      ////
+      //// Limit the rate of what goes over the radio (downsampling when routing).
+      ////
+      pub_max_frequencies: [
+        "/[^/]+/pose=10",
+        "/[^/]+/state=10",
+      ],
+
+      ////
+      //// Service calls across the network (takeoff waits for arming)
+      ////
+      queries_timeout: {
+        default: 5.0,
+        services: ["/[^/]+/takeoff=30.0", ".*=10.0"],
+      },
+    },
+  },
+
+  //// mode / connect / listen are given by the launch files (command line)
+  mode: "peer",
+
+  scouting: {
+    //// No multicast: the network is defined explicitly (no surprise links with
+    //// other Zenoh nodes on the LAN). Gossip lets the peers find each other
+    //// through the router.
+    multicast: {
+      enabled: false,
+    },
+    gossip: {
+      enabled: true,
+    },
+  },
+}

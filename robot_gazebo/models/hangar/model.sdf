@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!-- 20 x 15 x 6 m hangar, door facing +x -->
+<sdf version="1.9">
+  <model name="hangar">
+    <static>true</static>
+    <link name="link">
+      <visual name="walls">
+        <pose>0 0 3 0 0 0</pose>
+        <geometry><box><size>20 15 6</size></box></geometry>
+        <material>
+          <ambient>0.55 0.57 0.6 1</ambient>
+          <diffuse>0.55 0.57 0.6 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.6</metalness><roughness>0.5</roughness></metal></pbr>
+        </material>
+      </visual>
+      <collision name="walls_collision">
+        <pose>0 0 3 0 0 0</pose>
+        <geometry><box><size>20 15 6</size></box></geometry>
+      </collision>
+      <visual name="roof">
+        <pose>0 0 6.25 0 0 0</pose>
+        <geometry><box><size>20.6 15.6 0.5</size></box></geometry>
+        <material>
+          <ambient>0.35 0.36 0.4 1</ambient>
+          <diffuse>0.35 0.36 0.4 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.5</metalness><roughness>0.5</roughness></metal></pbr>
+        </material>
+      </visual>
+      <collision name="roof_collision">
+        <pose>0 0 6.25 0 0 0</pose>
+        <geometry><box><size>20.6 15.6 0.5</size></box></geometry>
+      </collision>
+      <visual name="door">
+        <pose>10.01 0 2.5 0 0 0</pose>
+        <geometry><box><size>0.02 10 5</size></box></geometry>
+        <material>
+          <ambient>0.25 0.3 0.38 1</ambient>
+          <diffuse>0.25 0.3 0.38 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.4</metalness><roughness>0.6</roughness></metal></pbr>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

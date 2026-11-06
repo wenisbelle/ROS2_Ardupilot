@@ -1,0 +1,363 @@
+<?xml version="1.0"?>
+<!-- 40 x 30 m crop field, planting rows along x every ~0.85 m (row detection / inspection) -->
+<sdf version="1.9">
+  <model name="crop_field">
+    <static>true</static>
+    <link name="link">
+      <visual name="soil">
+        <pose>0 0 0.025 0 0 0</pose>
+        <geometry><box><size>40 30 0.05</size></box></geometry>
+        <material>
+          <ambient>0.36 0.25 0.15 1</ambient>
+          <diffuse>0.36 0.25 0.15 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>1.0</roughness></metal></pbr>
+        </material>
+      </visual>
+      <collision name="soil_collision">
+        <pose>0 0 0.025 0 0 0</pose>
+        <geometry><box><size>40 30 0.05</size></box></geometry>
+      </collision>
+      <visual name="row_0">
+        <pose>0 -14.000 0.3 0 0 0</pose>
+        <geometry><box><size>38 0.45 0.5</size></box></geometry>
+        <material>
+          <ambient>0.25 0.5 0.12 1</ambient>
+          <diffuse>0.25 0.5 0.12 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.9</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="row_1">
+        <pose>0 -13.152 0.3 0 0 0</pose>
+        <geometry><box><size>38 0.45 0.5</size></box></geometry>
+        <material>
+          <ambient>0.25 0.5 0.12 1</ambient>
+          <diffuse>0.25 0.5 0.12 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.9</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="row_2">
+        <pose>0 -12.303 0.3 0 0 0</pose>
+        <geometry><box><size>38 0.45 0.5</size></box></geometry>
+        <material>
+          <ambient>0.25 0.5 0.12 1</ambient>
+          <diffuse>0.25 0.5 0.12 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.9</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="row_3">
+        <pose>0 -11.455 0.3 0 0 0</pose>
+        <geometry><box><size>38 0.45 0.5</size></box></geometry>
+        <material>
+          <ambient>0.25 0.5 0.12 1</ambient>
+          <diffuse>0.25 0.5 0.12 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.9</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="row_4">
+        <pose>0 -10.606 0.3 0 0 0</pose>
+        <geometry><box><size>38 0.45 0.5</size></box></geometry>
+        <material>
+          <ambient>0.25 0.5 0.12 1</ambient>
+          <diffuse>0.25 0.5 0.12 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.9</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="row_5">
+        <pose>0 -9.758 0.3 0 0 0</pose>
+        <geometry><box><size>38 0.45 0.5</size></box></geometry>
+        <material>
+          <ambient>0.25 0.5 0.12 1</ambient>
+          <diffuse>0.25 0.5 0.12 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.9</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="row_6">
+        <pose>0 -8.909 0.3 0 0 0</pose>
+        <geometry><box><size>38 0.45 0.5</size></box></geometry>
+        <material>
+          <ambient>0.25 0.5 0.12 1</ambient>
+          <diffuse>0.25 0.5 0.12 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.9</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="row_7">
+        <pose>0 -8.061 0.3 0 0 0</pose>
+        <geometry><box><size>38 0.45 0.5</size></box></geometry>
+        <material>
+          <ambient>0.25 0.5 0.12 1</ambient>
+          <diffuse>0.25 0.5 0.12 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.9</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="row_8">
+        <pose>0 -7.212 0.3 0 0 0</pose>
+        <geometry><box><size>38 0.45 0.5</size></box></geometry>
+        <material>
+          <ambient>0.25 0.5 0.12 1</ambient>
+          <diffuse>0.25 0.5 0.12 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.9</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="row_9">
+        <pose>0 -6.364 0.3 0 0 0</pose>
+        <geometry><box><size>38 0.45 0.5</size></box></geometry>
+        <material>
+          <ambient>0.25 0.5 0.12 1</ambient>
+          <diffuse>0.25 0.5 0.12 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.9</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="row_10">
+        <pose>0 -5.515 0.3 0 0 0</pose>
+        <geometry><box><size>38 0.45 0.5</size></box></geometry>
+        <material>
+          <ambient>0.25 0.5 0.12 1</ambient>
+          <diffuse>0.25 0.5 0.12 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.9</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="row_11">
+        <pose>0 -4.667 0.3 0 0 0</pose>
+        <geometry><box><size>38 0.45 0.5</size></box></geometry>
+        <material>
+          <ambient>0.25 0.5 0.12 1</ambient>
+          <diffuse>0.25 0.5 0.12 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.9</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="row_12">
+        <pose>0 -3.818 0.3 0 0 0</pose>
+        <geometry><box><size>38 0.45 0.5</size></box></geometry>
+        <material>
+          <ambient>0.25 0.5 0.12 1</ambient>
+          <diffuse>0.25 0.5 0.12 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.9</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="row_13">
+        <pose>0 -2.970 0.3 0 0 0</pose>
+        <geometry><box><size>38 0.45 0.5</size></box></geometry>
+        <material>
+          <ambient>0.25 0.5 0.12 1</ambient>
+          <diffuse>0.25 0.5 0.12 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.9</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="row_14">
+        <pose>0 -2.121 0.3 0 0 0</pose>
+        <geometry><box><size>38 0.45 0.5</size></box></geometry>
+        <material>
+          <ambient>0.25 0.5 0.12 1</ambient>
+          <diffuse>0.25 0.5 0.12 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.9</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="row_15">
+        <pose>0 -1.273 0.3 0 0 0</pose>
+        <geometry><box><size>38 0.45 0.5</size></box></geometry>
+        <material>
+          <ambient>0.25 0.5 0.12 1</ambient>
+          <diffuse>0.25 0.5 0.12 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.9</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="row_16">
+        <pose>0 -0.424 0.3 0 0 0</pose>
+        <geometry><box><size>38 0.45 0.5</size></box></geometry>
+        <material>
+          <ambient>0.25 0.5 0.12 1</ambient>
+          <diffuse>0.25 0.5 0.12 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.9</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="row_17">
+        <pose>0 0.424 0.3 0 0 0</pose>
+        <geometry><box><size>38 0.45 0.5</size></box></geometry>
+        <material>
+          <ambient>0.25 0.5 0.12 1</ambient>
+          <diffuse>0.25 0.5 0.12 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.9</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="row_18">
+        <pose>0 1.273 0.3 0 0 0</pose>
+        <geometry><box><size>38 0.45 0.5</size></box></geometry>
+        <material>
+          <ambient>0.25 0.5 0.12 1</ambient>
+          <diffuse>0.25 0.5 0.12 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.9</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="row_19">
+        <pose>0 2.121 0.3 0 0 0</pose>
+        <geometry><box><size>38 0.45 0.5</size></box></geometry>
+        <material>
+          <ambient>0.25 0.5 0.12 1</ambient>
+          <diffuse>0.25 0.5 0.12 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.9</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="row_20">
+        <pose>0 2.970 0.3 0 0 0</pose>
+        <geometry><box><size>38 0.45 0.5</size></box></geometry>
+        <material>
+          <ambient>0.25 0.5 0.12 1</ambient>
+          <diffuse>0.25 0.5 0.12 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.9</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="row_21">
+        <pose>0 3.818 0.3 0 0 0</pose>
+        <geometry><box><size>38 0.45 0.5</size></box></geometry>
+        <material>
+          <ambient>0.25 0.5 0.12 1</ambient>
+          <diffuse>0.25 0.5 0.12 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.9</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="row_22">
+        <pose>0 4.667 0.3 0 0 0</pose>
+        <geometry><box><size>38 0.45 0.5</size></box></geometry>
+        <material>
+          <ambient>0.25 0.5 0.12 1</ambient>
+          <diffuse>0.25 0.5 0.12 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.9</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="row_23">
+        <pose>0 5.515 0.3 0 0 0</pose>
+        <geometry><box><size>38 0.45 0.5</size></box></geometry>
+        <material>
+          <ambient>0.25 0.5 0.12 1</ambient>
+          <diffuse>0.25 0.5 0.12 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.9</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="row_24">
+        <pose>0 6.364 0.3 0 0 0</pose>
+        <geometry><box><size>38 0.45 0.5</size></box></geometry>
+        <material>
+          <ambient>0.25 0.5 0.12 1</ambient>
+          <diffuse>0.25 0.5 0.12 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.9</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="row_25">
+        <pose>0 7.212 0.3 0 0 0</pose>
+        <geometry><box><size>38 0.45 0.5</size></box></geometry>
+        <material>
+          <ambient>0.25 0.5 0.12 1</ambient>
+          <diffuse>0.25 0.5 0.12 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.9</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="row_26">
+        <pose>0 8.061 0.3 0 0 0</pose>
+        <geometry><box><size>38 0.45 0.5</size></box></geometry>
+        <material>
+          <ambient>0.25 0.5 0.12 1</ambient>
+          <diffuse>0.25 0.5 0.12 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.9</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="row_27">
+        <pose>0 8.909 0.3 0 0 0</pose>
+        <geometry><box><size>38 0.45 0.5</size></box></geometry>
+        <material>
+          <ambient>0.25 0.5 0.12 1</ambient>
+          <diffuse>0.25 0.5 0.12 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.9</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="row_28">
+        <pose>0 9.758 0.3 0 0 0</pose>
+        <geometry><box><size>38 0.45 0.5</size></box></geometry>
+        <material>
+          <ambient>0.25 0.5 0.12 1</ambient>
+          <diffuse>0.25 0.5 0.12 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.9</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="row_29">
+        <pose>0 10.606 0.3 0 0 0</pose>
+        <geometry><box><size>38 0.45 0.5</size></box></geometry>
+        <material>
+          <ambient>0.25 0.5 0.12 1</ambient>
+          <diffuse>0.25 0.5 0.12 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.9</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="row_30">
+        <pose>0 11.455 0.3 0 0 0</pose>
+        <geometry><box><size>38 0.45 0.5</size></box></geometry>
+        <material>
+          <ambient>0.25 0.5 0.12 1</ambient>
+          <diffuse>0.25 0.5 0.12 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.9</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="row_31">
+        <pose>0 12.303 0.3 0 0 0</pose>
+        <geometry><box><size>38 0.45 0.5</size></box></geometry>
+        <material>
+          <ambient>0.25 0.5 0.12 1</ambient>
+          <diffuse>0.25 0.5 0.12 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.9</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="row_32">
+        <pose>0 13.152 0.3 0 0 0</pose>
+        <geometry><box><size>38 0.45 0.5</size></box></geometry>
+        <material>
+          <ambient>0.25 0.5 0.12 1</ambient>
+          <diffuse>0.25 0.5 0.12 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.9</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="row_33">
+        <pose>0 14.000 0.3 0 0 0</pose>
+        <geometry><box><size>38 0.45 0.5</size></box></geometry>
+        <material>
+          <ambient>0.25 0.5 0.12 1</ambient>
+          <diffuse>0.25 0.5 0.12 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.9</roughness></metal></pbr>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

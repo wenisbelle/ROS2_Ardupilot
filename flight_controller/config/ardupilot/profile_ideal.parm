@@ -1,0 +1,7 @@
+# =============================================================================
+# Simulation profile "ideal": SITL default sensors (almost no noise, no
+# vibration, perfect GPS). Use it to develop / debug algorithms.
+# Wind in Gazebo is controlled separately (ros2 run robot_gazebo set_wind).
+# =============================================================================
+SIM_BARO_RND     0
+SIM_GPS1_NOISE   0

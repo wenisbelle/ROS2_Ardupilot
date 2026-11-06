@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!-- Windsock (decorative, points to +x) -->
+<sdf version="1.9">
+  <model name="windsock">
+    <static>true</static>
+    <link name="link">
+      <visual name="pole">
+        <pose>0 0 2.5 0 0 0</pose>
+        <geometry><cylinder><radius>0.05</radius><length>5.0</length></cylinder></geometry>
+        <material>
+          <ambient>0.7 0.7 0.7 1</ambient>
+          <diffuse>0.7 0.7 0.7 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.6</metalness><roughness>0.4</roughness></metal></pbr>
+        </material>
+      </visual>
+      <collision name="pole_collision">
+        <pose>0 0 2.5 0 0 0</pose>
+        <geometry><cylinder><radius>0.05</radius><length>5.0</length></cylinder></geometry>
+      </collision>
+      <visual name="sock">
+        <pose>0.9 0 4.8 0 1.5708 0</pose>
+        <geometry><cylinder><radius>0.22</radius><length>1.6</length></cylinder></geometry>
+        <material>
+          <ambient>1.0 0.45 0.0 1</ambient>
+          <diffuse>1.0 0.45 0.0 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.7</roughness></metal></pbr>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

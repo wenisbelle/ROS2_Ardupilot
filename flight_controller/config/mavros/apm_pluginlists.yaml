@@ -1,0 +1,39 @@
+# MAVROS plugins loaded for each drone. Everything is denied and only the
+# plugins below are allowed: with several drones (one MAVROS per drone) this
+# saves a lot of CPU and topics. Add plugins here when you need them
+# (list: grep "class name" /opt/ros/jazzy/share/mavros*/mavros_plugins.xml)
+/**:
+  ros__parameters:
+    plugin_denylist:
+      - '*'
+    plugin_allowlist:
+      # --- system / link ---
+      - sys_status          # state, battery, extended state, set_mode, set_stream_rate
+      - sys_time            # time sync FCU <-> ROS
+      - command             # arming, takeoff, land, generic COMMAND_LONG
+      - param               # get / set ArduPilot parameters
+      # --- estimation (EKF3 outputs) ---
+      - local_position      # pose / velocity in the local EKF frame (ENU)
+      - global_position     # lat / lon / alt, relative altitude, gp_origin
+      - imu                 # attitude, IMU data
+      - home_position
+      - gps_status          # raw GPS, satellites, fix
+      - vfr_hud
+      - wind_estimation     # wind estimated by ArduPilot
+      - vibration
+      # --- control (GUIDED mode) ---
+      - setpoint_raw        # position / velocity / acceleration / yaw targets (used by drone_commander)
+      - setpoint_position
+      - setpoint_velocity
+      - setpoint_accel
+      # --- missions (AUTO mode) ---
+      - waypoint
+      - geofence
+      - rallypoint
+      # --- RC ---
+      - rc_io
+      # --- real drone extras ---
+      - gps_rtk             # RTK corrections injection (RTCM)
+      - mount_control       # gimbal
+      - distance_sensor
+      - companion_process_status

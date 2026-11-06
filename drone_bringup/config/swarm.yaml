@@ -1,0 +1,22 @@
+# Swarm description used by swarm.launch.py
+#   ros2 launch drone_bringup swarm.launch.py                       (this file)
+#   ros2 launch drone_bringup swarm.launch.py config:=/path/my_swarm.yaml
+#
+# world:     runway | farm | village | disaster | /path/world.sdf
+# defaults:  any argument of drone.launch.py, applied to every drone
+# drones:    one entry per drone. id is mandatory (MAV_SYSID, ROS domain, drone<id>);
+#            any argument of drone.launch.py can be overridden per drone.
+#            Default spawn: x = 3*(id-1), y = 0 (landing pads of the worlds)
+world: runway
+
+defaults:
+  profile: ideal
+  camera: "true"
+
+drones:
+  - id: 1
+    frame: x500v2
+  - id: 2
+    frame: x500v2
+  - id: 3
+    frame: hexa

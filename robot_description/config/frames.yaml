@@ -1,0 +1,18 @@
+# Airframes available for the simulation.
+#   sdf/frame_<name>.xacro                          -> Gazebo model (geometry, mass, rotors)
+#   flight_controller/config/ardupilot/<name>.parm  -> ArduPilot parameters of the frame
+#   spawn_z                                         -> height of base_link when standing on the ground
+#   camera_*                                        -> camera mount (must match frame_<name>.xacro, used for the static TF)
+x500v2:
+  description: "Holybro X500 V2 quad X - 500 mm, 10 in props, 2.0 kg"
+  spawn_z: 0.24
+  camera_x: 0.13
+  camera_z: -0.02
+  camera_pitch: 0.35
+
+hexa:
+  description: "Large hexa X (Tarot 960 class) - 960 mm, 15 in props, 6.0 kg"
+  spawn_z: 0.345
+  camera_x: 0.20
+  camera_z: -0.10
+  camera_pitch: 0.785

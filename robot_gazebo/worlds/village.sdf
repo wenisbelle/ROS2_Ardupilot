@@ -1,0 +1,459 @@
+<?xml version="1.0" ?>
+<!-- ========================================================================== -->
+<!--  village.sdf - small town: streets, buildings, cars, people              -->
+<!--  Urban scenarios: obstacle avoidance between buildings, vision /         -->
+<!--  AI (people, vehicles, signs), mapping. GPS origin: Sao Jose dos         -->
+<!--  Campos, Brazil. Main street E-W at y = -25, cross street N-S x = 60.    -->
+<!--                                                                            -->
+<!--  Drone take-off pads: x = 0, 3, 6, 9, 12, 15 m (y = 0) -> default spawn    -->
+<!--  All the scenery is static (dynamic cones / barrels cost ~35 % of the RTF)  -->
+<!--  of drone1..drone6. World frame: ENU (+x East, +y North), the origin is    -->
+<!--  the GPS origin (spherical_coordinates) used by ArduPilot SITL (home) and  -->
+<!--  by the swarm "map" frame.                                                 -->
+<!-- ========================================================================== -->
+<sdf version="1.9">
+  <world name="village">
+
+    <!-- 1 kHz physics: ArduPilot SITL runs lock-step with Gazebo (JSON backend) -->
+    <physics name="1ms" type="ignored">
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1.0</real_time_factor>
+    </physics>
+
+    <plugin filename="gz-sim-physics-system" name="gz::sim::systems::Physics"/>
+    <plugin filename="gz-sim-user-commands-system" name="gz::sim::systems::UserCommands"/>
+    <plugin filename="gz-sim-scene-broadcaster-system" name="gz::sim::systems::SceneBroadcaster"/>
+    <plugin filename="gz-sim-sensors-system" name="gz::sim::systems::Sensors">
+      <render_engine>ogre2</render_engine>
+    </plugin>
+    <!-- IMU sensor of the drones (read by the ArduPilotPlugin) -->
+    <plugin filename="gz-sim-imu-system" name="gz::sim::systems::Imu"/>
+
+    <!-- Wind / body drag on links with enable_wind (drone base_link).
+         force_approximation_scaling_factor k calibrated in flight: the measured force
+         is ~1.1 * k^2 * mass * (v_wind - v_link); k = 0.37 -> ~0.15 * m * v, i.e.
+         X500 ~3 N and big hexa ~9 N at 10 m/s (lean ~7 deg to hold position).
+         Active after the first wind message (world.launch.py sends it at start).
+         Change at run time: ros2 run robot_gazebo set_wind -s 5 -d 90 -->
+    <plugin filename="gz-sim-wind-effects-system" name="gz::sim::systems::WindEffects">
+      <force_approximation_scaling_factor>0.37</force_approximation_scaling_factor>
+      <horizontal>
+        <magnitude>
+          <time_for_rise>10</time_for_rise>
+          <sin>
+            <amplitude_percent>0.15</amplitude_percent>
+            <period>12</period>
+          </sin>
+          <noise type="gaussian">
+            <mean>0</mean>
+            <stddev>0.3</stddev>
+          </noise>
+        </magnitude>
+        <direction>
+          <time_for_rise>30</time_for_rise>
+          <sin>
+            <amplitude>10</amplitude>
+            <period>20</period>
+          </sin>
+          <noise type="gaussian">
+            <mean>0</mean>
+            <stddev>3</stddev>
+          </noise>
+        </direction>
+      </horizontal>
+      <vertical>
+        <noise type="gaussian">
+          <mean>0</mean>
+          <stddev>0.1</stddev>
+        </noise>
+      </vertical>
+    </plugin>
+    <wind>
+      <linear_velocity>0 0 0</linear_velocity>
+    </wind>
+
+    <!-- GPS origin of the world (= ArduPilot SITL home of every drone) -->
+    <spherical_coordinates>
+      <surface_model>EARTH_WGS84</surface_model>
+      <world_frame_orientation>ENU</world_frame_orientation>
+      <latitude_deg>-23.2237</latitude_deg>
+      <longitude_deg>-45.9009</longitude_deg>
+      <elevation>600</elevation>
+      <heading_deg>0</heading_deg>
+    </spherical_coordinates>
+
+    <scene>
+      <ambient>0.6 0.6 0.6 1</ambient>
+      <background>0.62 0.76 0.92 1</background>
+      <shadows>true</shadows>
+      <sky></sky>
+    </scene>
+
+    <light type="directional" name="sun">
+      <cast_shadows>true</cast_shadows>
+      <pose>0 0 100 0 0 0</pose>
+      <diffuse>0.9 0.9 0.85 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <direction>-0.4 0.3 -0.85</direction>
+    </light>
+
+    <model name="ground_plane">
+      <static>true</static>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <plane><normal>0 0 1</normal><size>2000 2000</size></plane>
+          </geometry>
+          <surface>
+            <friction>
+              <ode><mu>1.0</mu><mu2>1.0</mu2></ode>
+            </friction>
+          </surface>
+        </collision>
+        <visual name="ground">
+          <geometry>
+            <plane><normal>0 0 1</normal><size>2000 2000</size></plane>
+          </geometry>
+          <material>
+            <ambient>0.34 0.46 0.22 1</ambient>
+            <diffuse>0.34 0.46 0.22 1</diffuse>
+            <specular>0.05 0.05 0.05 1</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- ================================================================= -->
+    <!-- Take-off area: 6 landing pads (drone1..drone6 default spawn)    -->
+    <!-- ================================================================= -->
+    <model name="plaza">
+      <static>true</static>
+      <pose>7.5 0 0.005 0 0 0</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry><box><size>30 12 0.01</size></box></geometry>
+          <material>
+            <ambient>0.62 0.62 0.6 1</ambient>
+            <diffuse>0.62 0.62 0.6 1</diffuse>
+            <specular>0.05 0.05 0.05 1</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+    <include>
+      <uri>model://landing_pad</uri>
+      <name>pad_1</name>
+      <static>true</static>
+      <pose>0 0 0.01 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://landing_pad</uri>
+      <name>pad_2</name>
+      <static>true</static>
+      <pose>3 0 0.01 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://landing_pad</uri>
+      <name>pad_3</name>
+      <static>true</static>
+      <pose>6 0 0.01 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://landing_pad</uri>
+      <name>pad_4</name>
+      <static>true</static>
+      <pose>9 0 0.01 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://landing_pad</uri>
+      <name>pad_5</name>
+      <static>true</static>
+      <pose>12 0 0.01 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://landing_pad</uri>
+      <name>pad_6</name>
+      <static>true</static>
+      <pose>15 0 0.01 0 0 0</pose>
+    </include>
+
+    <!-- ================================================================= -->
+    <!-- Streets (road_straight = 50 m, road_crossing = 10 m)            -->
+    <!-- ================================================================= -->
+    <include>
+      <uri>model://road_crossing</uri>
+      <name>crossing</name>
+      <static>true</static>
+      <pose>60 -25 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://road_straight</uri>
+      <name>main_st_1</name>
+      <static>true</static>
+      <pose>-70 -25 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://road_straight</uri>
+      <name>main_st_2</name>
+      <static>true</static>
+      <pose>-20 -25 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://road_straight</uri>
+      <name>main_st_3</name>
+      <static>true</static>
+      <pose>30 -25 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://road_straight</uri>
+      <name>main_st_4</name>
+      <static>true</static>
+      <pose>90 -25 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://road_straight</uri>
+      <name>main_st_5</name>
+      <static>true</static>
+      <pose>140 -25 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://road_straight</uri>
+      <name>cross_st_1</name>
+      <static>true</static>
+      <pose>60 -55 0 0 0 1.5708</pose>
+    </include>
+    <include>
+      <uri>model://road_straight</uri>
+      <name>cross_st_2</name>
+      <static>true</static>
+      <pose>60 5 0 0 0 1.5708</pose>
+    </include>
+    <include>
+      <uri>model://road_straight</uri>
+      <name>cross_st_3</name>
+      <static>true</static>
+      <pose>60 55 0 0 0 1.5708</pose>
+    </include>
+
+    <!-- ================================================================= -->
+    <!-- Buildings                                                       -->
+    <!-- ================================================================= -->
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Apartment</uri>
+      <name>apartment</name>
+      <static>true</static>
+      <pose>-35 25 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://house_small</uri>
+      <name>house_2</name>
+      <static>true</static>
+      <pose>5 50 0 0 0 -1.5708</pose>
+    </include>
+    <include>
+      <uri>model://house_two_storey</uri>
+      <name>house_3</name>
+      <static>true</static>
+      <pose>30 47 0 0 0 -1.5708</pose>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Post Office</uri>
+      <name>post_office</name>
+      <static>true</static>
+      <pose>35 15 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Cafe</uri>
+      <name>cafe</name>
+      <static>true</static>
+      <pose>82 10 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://house_blue</uri>
+      <name>house_1</name>
+      <static>true</static>
+      <pose>100 55 0 0 0 3.14159</pose>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Fire Station</uri>
+      <name>fire_station</name>
+      <static>true</static>
+      <pose>20 -50 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Office Building</uri>
+      <name>office</name>
+      <static>true</static>
+      <pose>-35 -55 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://hangar</uri>
+      <name>warehouse</name>
+      <static>true</static>
+      <pose>105 -45 0 0 0 1.5708</pose>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Radio Tower</uri>
+      <name>radio_tower</name>
+      <static>true</static>
+      <pose>-80 70 0 0 0 0</pose>
+    </include>
+
+    <!-- ================================================================= -->
+    <!-- Vehicles                                                        -->
+    <!-- ================================================================= -->
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Prius Hybrid</uri>
+      <name>car_1</name>
+      <static>true</static>
+      <pose>15 -23 0 0 0 -1.5708</pose>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/SUV</uri>
+      <name>car_2</name>
+      <static>true</static>
+      <pose>40 -27 0 0 0 1.5708</pose>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Bus</uri>
+      <name>bus</name>
+      <static>true</static>
+      <pose>120 -23 0 0 0 -1.5708</pose>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Hatchback blue</uri>
+      <name>car_3</name>
+      <static>true</static>
+      <pose>62 25 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Pickup</uri>
+      <name>car_4</name>
+      <static>true</static>
+      <pose>-50 -27 0 0 0 0</pose>
+    </include>
+
+    <!-- ================================================================= -->
+    <!-- People                                                          -->
+    <!-- ================================================================= -->
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Walking person</uri>
+      <name>person_1</name>
+      <static>true</static>
+      <pose>12 10 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Casual female</uri>
+      <name>person_2</name>
+      <static>true</static>
+      <pose>30 -19.5 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Male visitor</uri>
+      <name>person_3</name>
+      <static>true</static>
+      <pose>66 30 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Standing person</uri>
+      <name>person_4</name>
+      <static>true</static>
+      <pose>-10 8 0 0 0 0</pose>
+    </include>
+
+    <!-- ================================================================= -->
+    <!-- Street furniture                                                -->
+    <!-- ================================================================= -->
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Lamp Post</uri>
+      <name>lamp_1</name>
+      <static>true</static>
+      <pose>-80 -19.6 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Lamp Post</uri>
+      <name>lamp_2</name>
+      <static>true</static>
+      <pose>-50 -19.6 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Lamp Post</uri>
+      <name>lamp_3</name>
+      <static>true</static>
+      <pose>-20 -19.6 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Lamp Post</uri>
+      <name>lamp_4</name>
+      <static>true</static>
+      <pose>10 -19.6 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Lamp Post</uri>
+      <name>lamp_5</name>
+      <static>true</static>
+      <pose>40 -19.6 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Lamp Post</uri>
+      <name>lamp_6</name>
+      <static>true</static>
+      <pose>70 -19.6 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Lamp Post</uri>
+      <name>lamp_7</name>
+      <static>true</static>
+      <pose>100 -19.6 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Lamp Post</uri>
+      <name>lamp_8</name>
+      <static>true</static>
+      <pose>130 -19.6 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Lamp Post</uri>
+      <name>lamp_9</name>
+      <static>true</static>
+      <pose>160 -19.6 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Stop Sign</uri>
+      <name>stop_sign</name>
+      <static>true</static>
+      <pose>54 -19.8 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Fire hydrant</uri>
+      <name>hydrant</name>
+      <static>true</static>
+      <pose>36 -19.8 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Oak tree</uri>
+      <name>park_tree_1</name>
+      <static>true</static>
+      <pose>-12 18 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Oak tree</uri>
+      <name>park_tree_2</name>
+      <static>true</static>
+      <pose>28 20 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Oak tree</uri>
+      <name>park_tree_3</name>
+      <static>true</static>
+      <pose>-14 -10 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Oak tree</uri>
+      <name>park_tree_4</name>
+      <static>true</static>
+      <pose>26 -12 0 0 0 0</pose>
+    </include>
+
+  </world>
+</sdf>

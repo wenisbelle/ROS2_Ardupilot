@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!-- Round hay bale (r = 0.75 m), axis along y -->
+<sdf version="1.9">
+  <model name="hay_bale">
+    <static>true</static>
+    <link name="link">
+      <visual name="bale">
+        <pose>0 0 0.75 1.5708 0 0</pose>
+        <geometry><cylinder><radius>0.75</radius><length>1.2</length></cylinder></geometry>
+        <material>
+          <ambient>0.82 0.7 0.35 1</ambient>
+          <diffuse>0.82 0.7 0.35 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>1.0</roughness></metal></pbr>
+        </material>
+      </visual>
+      <collision name="bale_collision">
+        <pose>0 0 0.75 1.5708 0 0</pose>
+        <geometry><cylinder><radius>0.75</radius><length>1.2</length></cylinder></geometry>
+      </collision>
+    </link>
+  </model>
+</sdf>

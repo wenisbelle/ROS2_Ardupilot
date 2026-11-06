@@ -1,0 +1,282 @@
+<?xml version="1.0"?>
+<!-- =========================================================================
+  Large hexacopter (hexa X), Tarot 960 / S900 class
+    wheelbase 960 mm (motors at R = 0.48 m), 4114 KV400 motors on 6S, 15" props
+    take-off mass 6.0 kg (frame + 6S 10 Ah + gimbal camera + companion)
+  Visual: primitives + PX4 motor / propeller meshes (scaled)
+
+  ArduPilot motor order (FRAME_CLASS 2 Hexa, FRAME_TYPE 1 X), angle clockwise
+  from the nose seen from above:
+    SERVO1 / ch0 rotor_0   90 deg (right)        CW
+    SERVO2 / ch1 rotor_1  -90 deg (left)         CCW
+    SERVO3 / ch2 rotor_2  -30 deg (front-left)   CW
+    SERVO4 / ch3 rotor_3  150 deg (back-right)   CCW
+    SERVO5 / ch4 rotor_4   30 deg (front-right)  CCW
+    SERVO6 / ch5 rotor_5 -150 deg (back-left)    CW
+
+  Rotor sizing (15" prop, R = 0.19 m, cp = 0.7 R):
+    max speed 600 rad/s (~5700 rpm) -> T_max = 20 N/motor -> T/W = 2.0
+    hover ~420 rad/s (70 % of the motor command)
+    yaw moment ~0.016 N.m per N of thrust
+    motor: small-signal time constant ~15 ms, max torque 0.7 N.m (slower than the X500)
+  ========================================================================= -->
+<sdf version="1.9" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- ===== Body ===== -->
+  <xacro:property name="body_mass" value="6.0"/>
+  <xacro:property name="body_ixx" value="0.22"/>
+  <xacro:property name="body_iyy" value="0.22"/>
+  <xacro:property name="body_izz" value="0.40"/>
+  <xacro:property name="arm_r" value="0.48"/>
+  <xacro:property name="rotor_z" value="0.085"/>
+  <xacro:property name="cos30" value="0.8660254"/>
+
+  <!-- ===== Rotors ===== -->
+  <xacro:property name="rotor_mass" value="0.10"/>
+  <xacro:property name="rotor_ixx" value="3.5e-5"/>
+  <xacro:property name="rotor_izz" value="4.6e-4"/>
+  <xacro:property name="rotor_damping" value="3.3e-4"/>
+  <xacro:property name="blade_cp" value="0.133"/>
+  <xacro:property name="blade_area" value="2.046e-3"/>
+  <xacro:property name="prop_radius" value="0.19"/>
+  <xacro:property name="prop_scale" value="${15.0 / 13.0}"/>
+  <xacro:property name="bell_scale" value="1.3"/>
+  <xacro:property name="motor_max_speed" value="600"/>
+  <xacro:property name="motor_p_gain" value="0.03"/>
+  <xacro:property name="motor_torque_max" value="0.7"/>
+
+  <!-- ===== Camera default mount (gimbal camera under the nose) ===== -->
+  <xacro:property name="camera_x" value="0.20"/>
+  <xacro:property name="camera_z" value="-0.10"/>
+  <xacro:property name="camera_pitch_default" value="0.785"/>
+
+  <xacro:macro name="hexa_skid_surface">
+    <surface>
+      <friction>
+        <ode>
+          <mu>1.5</mu>
+          <mu2>1.5</mu2>
+        </ode>
+      </friction>
+      <contact>
+        <ode>
+          <min_depth>0.001</min_depth>
+          <max_vel>0</max_vel>
+        </ode>
+      </contact>
+    </surface>
+  </xacro:macro>
+
+  <!-- Carbon arm from the centre plate to the motor (phi = arm angle, CCW from +x) -->
+  <xacro:macro name="hexa_arm" params="i phi front">
+    <visual name="arm_${i}_visual">
+      <pose>${0.30 * cos(phi)} ${0.30 * sin(phi)} 0.035 0 1.5708 ${phi}</pose>
+      <geometry>
+        <cylinder>
+          <radius>0.0125</radius>
+          <length>0.36</length>
+        </cylinder>
+      </geometry>
+      <xacro:if value="${front}">
+        <xacro:material_front/>
+      </xacro:if>
+      <xacro:unless value="${front}">
+        <xacro:material_carbon/>
+      </xacro:unless>
+    </visual>
+    <visual name="motor_mount_${i}_visual">
+      <pose>${arm_r * cos(phi)} ${arm_r * sin(phi)} 0.04 0 0 0</pose>
+      <geometry>
+        <cylinder>
+          <radius>0.028</radius>
+          <length>0.03</length>
+        </cylinder>
+      </geometry>
+      <xacro:material_aluminium/>
+    </visual>
+    <visual name="motor_base_${i}_visual">
+      <pose>${arm_r * cos(phi)} ${arm_r * sin(phi)} ${rotor_z - 0.028 * bell_scale} 0 0 0</pose>
+      <geometry>
+        <mesh>
+          <scale>${bell_scale} ${bell_scale} ${bell_scale}</scale>
+          <uri>model://x500_base/meshes/5010Base.dae</uri>
+        </mesh>
+      </geometry>
+    </visual>
+  </xacro:macro>
+
+  <!-- Landing gear leg (vertical tube) -->
+  <xacro:macro name="hexa_leg" params="i x y">
+    <visual name="leg_${i}_visual">
+      <pose>${x} ${y} -0.17 0 0 0</pose>
+      <geometry>
+        <cylinder>
+          <radius>0.01</radius>
+          <length>0.32</length>
+        </cylinder>
+      </geometry>
+      <xacro:material_carbon/>
+    </visual>
+    <collision name="leg_${i}_collision">
+      <pose>${x} ${y} -0.17 0 0 0</pose>
+      <geometry>
+        <cylinder>
+          <radius>0.01</radius>
+          <length>0.32</length>
+        </cylinder>
+      </geometry>
+    </collision>
+  </xacro:macro>
+
+  <xacro:macro name="hexa_skid" params="side y">
+    <visual name="skid_${side}_visual">
+      <pose>0 ${y} -0.33 0 1.5708 0</pose>
+      <geometry>
+        <cylinder>
+          <radius>0.011</radius>
+          <length>0.55</length>
+        </cylinder>
+      </geometry>
+      <xacro:material_carbon/>
+    </visual>
+    <collision name="skid_${side}_collision">
+      <pose>0 ${y} -0.33 0 0 0</pose>
+      <geometry>
+        <box>
+          <size>0.55 0.022 0.022</size>
+        </box>
+      </geometry>
+      <xacro:hexa_skid_surface/>
+    </collision>
+  </xacro:macro>
+
+  <xacro:macro name="drone_frame" params="name fdm_port_in camera cam_pitch">
+    <link name="base_link">
+      <enable_wind>true</enable_wind>
+      <xacro:inertial_diag mass="${body_mass}" ixx="${body_ixx}" iyy="${body_iyy}" izz="${body_izz}"/>
+
+      <!-- centre plates -->
+      <visual name="bottom_plate_visual">
+        <pose>0 0 0.0 0 0 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.16</radius>
+            <length>0.004</length>
+          </cylinder>
+        </geometry>
+        <xacro:material_carbon/>
+      </visual>
+      <visual name="top_plate_visual">
+        <pose>0 0 0.07 0 0 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.15</radius>
+            <length>0.004</length>
+          </cylinder>
+        </geometry>
+        <xacro:material_carbon/>
+      </visual>
+      <visual name="electronics_visual">
+        <pose>0 0 0.035 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.16 0.12 0.06</size>
+          </box>
+        </geometry>
+        <xacro:material_rgb r="0.25" g="0.25" b="0.28"/>
+      </visual>
+      <visual name="battery_visual">
+        <pose>0 0 -0.05 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.20 0.09 0.065</size>
+          </box>
+        </geometry>
+        <xacro:material_battery/>
+      </visual>
+      <visual name="front_marker_visual">
+        <pose>0.12 0 0.075 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.05 0.04 0.004</size>
+          </box>
+        </geometry>
+        <xacro:material_front/>
+      </visual>
+      <visual name="gps_mast_visual">
+        <pose>-0.08 0 0.14 0 0 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.006</radius>
+            <length>0.14</length>
+          </cylinder>
+        </geometry>
+        <xacro:material_carbon/>
+      </visual>
+      <visual name="gps_puck_visual">
+        <pose>-0.08 0 0.215 0 0 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.04</radius>
+            <length>0.015</length>
+          </cylinder>
+        </geometry>
+        <xacro:material_gps/>
+      </visual>
+
+      <!-- arms: phi = atan2(y, x) of each motor (front arms in red) -->
+      <xacro:hexa_arm i="0" phi="${-pi/2}" front="false"/>
+      <xacro:hexa_arm i="1" phi="${pi/2}" front="false"/>
+      <xacro:hexa_arm i="2" phi="${pi/6}" front="true"/>
+      <xacro:hexa_arm i="3" phi="${-5*pi/6}" front="false"/>
+      <xacro:hexa_arm i="4" phi="${-pi/6}" front="true"/>
+      <xacro:hexa_arm i="5" phi="${5*pi/6}" front="false"/>
+
+      <!-- landing gear -->
+      <xacro:hexa_leg i="0" x="0.15" y="0.22"/>
+      <xacro:hexa_leg i="1" x="-0.15" y="0.22"/>
+      <xacro:hexa_leg i="2" x="0.15" y="-0.22"/>
+      <xacro:hexa_leg i="3" x="-0.15" y="-0.22"/>
+      <xacro:hexa_skid side="left" y="0.22"/>
+      <xacro:hexa_skid side="right" y="-0.22"/>
+
+      <collision name="body_collision">
+        <pose>0 0 0.035 0 0 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.16</radius>
+            <length>0.075</length>
+          </cylinder>
+        </geometry>
+      </collision>
+    </link>
+
+    <xacro:IMU/>
+
+    <!-- rotor index = ArduPilot motor number - 1 -->
+    <xacro:rotor index="0" x="0"                  y="${-arm_r}"      z="${rotor_z}" dir="-1"/>
+    <xacro:rotor index="1" x="0"                  y="${arm_r}"       z="${rotor_z}" dir="1"/>
+    <xacro:rotor index="2" x="${arm_r * cos30}"   y="${arm_r * 0.5}" z="${rotor_z}" dir="-1"/>
+    <xacro:rotor index="3" x="${-arm_r * cos30}"  y="${-arm_r * 0.5}" z="${rotor_z}" dir="1"/>
+    <xacro:rotor index="4" x="${arm_r * cos30}"   y="${-arm_r * 0.5}" z="${rotor_z}" dir="1"/>
+    <xacro:rotor index="5" x="${-arm_r * cos30}"  y="${arm_r * 0.5}" z="${rotor_z}" dir="-1"/>
+
+    <xacro:if value="${camera}">
+      <xacro:camera name="${name}" x="${camera_x}" y="0" z="${camera_z}" pitch="${cam_pitch}"/>
+    </xacro:if>
+
+    <xacro:gazebo_essentials name="${name}"/>
+
+    <xacro:ardupilot_plugin fdm_port_in="${fdm_port_in}">
+      <motors>
+        <xacro:ap_motor channel="0" index="0" dir="-1"/>
+        <xacro:ap_motor channel="1" index="1" dir="1"/>
+        <xacro:ap_motor channel="2" index="2" dir="-1"/>
+        <xacro:ap_motor channel="3" index="3" dir="1"/>
+        <xacro:ap_motor channel="4" index="4" dir="1"/>
+        <xacro:ap_motor channel="5" index="5" dir="-1"/>
+      </motors>
+    </xacro:ardupilot_plugin>
+  </xacro:macro>
+
+</sdf>

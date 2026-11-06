@@ -1,0 +1,101 @@
+<?xml version="1.0"?>
+<!-- Red barn 14 x 10 m, ridge 7.5 m, door facing +x -->
+<sdf version="1.9">
+  <model name="barn">
+    <static>true</static>
+    <link name="link">
+      <visual name="walls">
+        <pose>0 0 2.5 0 0 0</pose>
+        <geometry><box><size>14 10 5</size></box></geometry>
+        <material>
+          <ambient>0.6 0.1 0.08 1</ambient>
+          <diffuse>0.6 0.1 0.08 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.85</roughness></metal></pbr>
+        </material>
+      </visual>
+      <collision name="walls_collision">
+        <pose>0 0 2.5 0 0 0</pose>
+        <geometry><box><size>14 10 5</size></box></geometry>
+      </collision>
+      <visual name="roof_n">
+        <pose>0 2.500 6.25 -0.4636 0 0</pose>
+        <geometry><box><size>14.6 5.990 0.15</size></box></geometry>
+        <material>
+          <ambient>0.25 0.25 0.27 1</ambient>
+          <diffuse>0.25 0.25 0.27 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.3</metalness><roughness>0.7</roughness></metal></pbr>
+        </material>
+      </visual>
+      <collision name="roof_n_collision">
+        <pose>0 2.500 6.25 -0.4636 0 0</pose>
+        <geometry><box><size>14.6 5.990 0.15</size></box></geometry>
+      </collision>
+      <visual name="roof_s">
+        <pose>0 -2.500 6.25 0.4636 0 0</pose>
+        <geometry><box><size>14.6 5.990 0.15</size></box></geometry>
+        <material>
+          <ambient>0.25 0.25 0.27 1</ambient>
+          <diffuse>0.25 0.25 0.27 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.3</metalness><roughness>0.7</roughness></metal></pbr>
+        </material>
+      </visual>
+      <collision name="roof_s_collision">
+        <pose>0 -2.500 6.25 0.4636 0 0</pose>
+        <geometry><box><size>14.6 5.990 0.15</size></box></geometry>
+      </collision>
+      <visual name="gable_e">
+        <pose>7.0 0 5.0 0 0 0</pose>
+        <geometry><box><size>0.2 7.0 2.4</size></box></geometry>
+        <material>
+          <ambient>0.6 0.1 0.08 1</ambient>
+          <diffuse>0.6 0.1 0.08 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.85</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="gable_w">
+        <pose>-7.0 0 5.0 0 0 0</pose>
+        <geometry><box><size>0.2 7.0 2.4</size></box></geometry>
+        <material>
+          <ambient>0.6 0.1 0.08 1</ambient>
+          <diffuse>0.6 0.1 0.08 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.85</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="door">
+        <pose>7.02 0 1.75 0 0 0</pose>
+        <geometry><box><size>0.04 3.5 3.5</size></box></geometry>
+        <material>
+          <ambient>0.95 0.95 0.95 1</ambient>
+          <diffuse>0.95 0.95 0.95 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.6</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="door_x1">
+        <pose>7.05 0 1.75 0.785 0 0</pose>
+        <geometry><box><size>0.02 0.2 4.9</size></box></geometry>
+        <material>
+          <ambient>0.95 0.95 0.95 1</ambient>
+          <diffuse>0.95 0.95 0.95 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.6</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="door_x2">
+        <pose>7.05 0 1.75 -0.785 0 0</pose>
+        <geometry><box><size>0.02 0.2 4.9</size></box></geometry>
+        <material>
+          <ambient>0.95 0.95 0.95 1</ambient>
+          <diffuse>0.95 0.95 0.95 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.6</roughness></metal></pbr>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

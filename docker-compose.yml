@@ -1,0 +1,28 @@
+services:
+  ardupilot_jazzy:
+    image: ardupilot_jazzy:latest
+    container_name: ardupilot_jazzy_container
+    hostname: ardupilot_jazzy_container
+    runtime: nvidia  # NVIDIA GPU for Gazebo rendering (cameras). Comment out if there is no nvidia-container-toolkit
+    environment:
+      - QT_X11_NO_MITSHM=1
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - NVIDIA_VISIBLE_DEVICES=all
+      - DISPLAY
+      - PULSE_SERVER=unix:/run/pulse-host/native  # host PulseAudio/PipeWire: QGC voice alerts (speech-dispatcher hangs without audio)
+    extra_hosts:
+      - "ardupilot_jazzy_container:127.0.1.1"  # hostname resolvable (sudo / QGC lock file)
+    devices:
+      - /dev/dri
+#      - /dev/ttyACM0:/dev/ttyACM0   ## Flight controller on USB (real drone / HITL bench with real_drone.launch.py)
+#      - /dev/input/js0:/dev/input/js0   ## Joystick (QGroundControl virtual joystick / joy_linux)
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - ${XDG_RUNTIME_DIR:-/run/user/1000}/pulse:/run/pulse-host:ro  # host audio socket (used by the "ubuntu" user, same uid 1000 as the host user)
+      - ./:/ROS2_ardupilot/src:rw  # Mount the current directory as readable and writable
+    shm_size: "2gb"     # Gazebo + several SITL / MAVROS / DDS processes
+    stdin_open: true
+    tty: true
+    restart: "no"
+    network_mode: "host"  # QGroundControl (UDP 14550), Zenoh (TCP 7447) and DDS on the host network
+    command: /bin/bash

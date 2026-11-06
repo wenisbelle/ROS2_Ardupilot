@@ -1,0 +1,202 @@
+FROM nvidia/cuda:12.8.1-base-ubuntu24.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+# Install locales and set up UTF-8
+RUN apt update && \
+    apt install -y locales && \
+    locale-gen en_US en_US.UTF-8 && \
+    update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
+# Set environment variables for locale
+ENV LANG=en_US.UTF-8 \
+    LANGUAGE=en_US:en \
+    LC_ALL=en_US.UTF-8
+
+SHELL [ "/bin/bash" , "-c" ]
+
+# Install ROS2
+
+RUN apt-get update && apt-get install -y software-properties-common \
+    && add-apt-repository universe
+
+RUN apt update \
+ && apt install -y --no-install-recommends curl \
+ && apt install -y --no-install-recommends gnupg2 \
+ && rm -rf /var/lib/apt/lists/*
+
+RUN apt-get update && apt-get install -y net-tools gedit lsb-release
+
+RUN curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
+RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | tee /etc/apt/sources.list.d/ros2.list > /dev/null
+
+RUN curl https://packages.osrfoundation.org/gazebo.gpg --output /usr/share/keyrings/pkgs-osrf-archive-keyring.gpg
+RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/pkgs-osrf-archive-keyring.gpg] http://packages.osrfoundation.org/gazebo/ubuntu-stable $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/gazebo-stable.list > /dev/null
+RUN apt-get update && apt-get -y install gz-harmonic
+
+RUN apt-get update && apt-get install -y ros-jazzy-desktop && apt-get install -y ros-jazzy-ros-gz
+
+# ============================================================================
+# ROS 2 side: MAVROS (link with the ArduPilot flight controller), DDS / Zenoh
+# middlewares, description tools, visualization and vision
+# ============================================================================
+RUN apt-get update && apt-get install -y ros-jazzy-mavros \
+                        ros-jazzy-mavros-extras \
+                        ros-jazzy-mavros-msgs \
+                        ros-jazzy-geographic-msgs \
+                        ros-jazzy-xacro \
+                        ros-jazzy-rmw-cyclonedds-cpp \
+                        ros-jazzy-rmw-zenoh-cpp \
+                        ros-jazzy-teleop-twist-keyboard \
+                        ros-jazzy-rqt-image-view \
+                        ros-jazzy-plotjuggler-ros \
+                        ros-jazzy-cv-bridge \
+                        python3-opencv
+
+# MAVROS needs the GeographicLib geoid / gravity / magnetic datasets (AMSL <-> WGS84 altitude)
+RUN apt-get update && apt-get install -y geographiclib-tools && \
+    /opt/ros/jazzy/lib/mavros/install_geographiclib_datasets.sh
+
+RUN apt-get install -y python3-rosdep \
+ && apt-get install -y python3-colcon-common-extensions \
+ && apt-get install -y python3-vcstool \
+ && apt-get install -y git unzip wget nano tmux
+
+# ============================================================================
+# ArduPilot SITL (the same firmware code that runs on the flight controller)
+# ARDUPILOT_VERSION: use the SAME version flashed on the real drone
+#   docker build --build-arg ARDUPILOT_VERSION=Copter-4.6.3 ...
+# ============================================================================
+RUN apt-get update && apt-get install -y build-essential ccache gawk \
+                        python3-dev python3-pip python3-setuptools python3-wheel \
+                        python3-empy python3-pexpect python3-lxml python3-numpy python3-serial \
+                        python3-matplotlib python3-wxgtk4.0 python3-psutil python3-venv
+
+# pymavlink for the system python (scripts / tests). --no-deps: never let pip replace the
+# apt numpy / opencv used by ROS 2 (cv_bridge)
+RUN pip3 install --break-system-packages --no-cache-dir --no-deps pymavlink fastcrc future
+
+# MAVProxy (optional command line GCS) in its own venv: its recent releases pull numpy 2,
+# opencv-python and vtk, which would break the ROS 2 python packages if installed system wide
+RUN python3 -m venv --system-site-packages /opt/mavproxy_venv && \
+    /opt/mavproxy_venv/bin/pip install --no-cache-dir MAVProxy && \
+    ln -sf /opt/mavproxy_venv/bin/mavproxy.py /usr/local/bin/mavproxy.py
+
+ARG ARDUPILOT_VERSION=Copter-4.7.2
+RUN git clone --depth 1 --branch ${ARDUPILOT_VERSION} https://github.com/ArduPilot/ardupilot.git /opt/ardupilot && \
+    cd /opt/ardupilot && \
+    git submodule update --init --recursive --depth 1
+RUN cd /opt/ardupilot && \
+    ./waf configure --board sitl && \
+    ./waf copter
+
+ENV ARDUPILOT_HOME=/opt/ardupilot
+ENV PATH=/opt/ardupilot/build/sitl/bin:/opt/ardupilot/Tools/autotest:${PATH}
+
+# ============================================================================
+# ardupilot_gazebo: ArduPilotPlugin (Gazebo <-> SITL JSON interface, lock-step)
+# Built against the Gazebo Harmonic vendored by ROS 2 Jazzy (same gz-sim 8)
+# ============================================================================
+RUN apt-get update && apt-get install -y rapidjson-dev libopencv-dev \
+                        libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
+                        gstreamer1.0-plugins-bad gstreamer1.0-libav gstreamer1.0-gl
+
+ARG ARDUPILOT_GAZEBO_COMMIT=f116b03552d05c8d0b0bed5ed67033a1183121d1
+ENV GZ_VERSION=harmonic
+RUN git clone https://github.com/ArduPilot/ardupilot_gazebo.git /opt/ardupilot_gazebo && \
+    cd /opt/ardupilot_gazebo && git checkout ${ARDUPILOT_GAZEBO_COMMIT} && \
+    source /opt/ros/jazzy/setup.bash && \
+    mkdir build && cd build && \
+    cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo && \
+    make -j$(nproc)
+
+ENV GZ_SIM_SYSTEM_PLUGIN_PATH=/opt/ardupilot_gazebo/build
+ENV GZ_SIM_RESOURCE_PATH=/opt/ardupilot_gazebo/models:/opt/ardupilot_gazebo/worlds
+
+# ============================================================================
+# Zenoh bridge for ROS 2 (DDS <-> Zenoh). One bridge per drone = one radio link
+# ============================================================================
+ARG ZENOH_VERSION=1.10.2
+RUN cd /tmp && \
+    wget -q https://github.com/eclipse-zenoh/zenoh-plugin-ros2dds/releases/download/${ZENOH_VERSION}/zenoh-plugin-ros2dds-${ZENOH_VERSION}-x86_64-unknown-linux-gnu-standalone.zip -O zenoh.zip && \
+    mkdir -p /opt/zenoh && unzip -o zenoh.zip -d /opt/zenoh && rm zenoh.zip && \
+    chmod +x /opt/zenoh/zenoh-bridge-ros2dds && \
+    ln -sf /opt/zenoh/zenoh-bridge-ros2dds /usr/local/bin/zenoh-bridge-ros2dds
+
+# ============================================================================
+# QGroundControl (AppImage extracted, so FUSE is not needed in the container).
+# QGC refuses to run as root: the `qgroundcontrol` command runs it as the
+# non-root user `ubuntu` (uid 1000) that already exists in the Ubuntu 24.04 image
+# ============================================================================
+RUN apt-get update && apt-get install -y libxcb-xinerama0 libxkbcommon-x11-0 libxcb-cursor0 \
+                        libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-randr0 libxcb-render-util0 \
+                        libxcb-shape0 libxcb-xfixes0 libxcb-xkb1 libegl1 libgl1 libpulse-mainloop-glib0 \
+                        libsdl2-2.0-0 speech-dispatcher gstreamer1.0-plugins-base gstreamer1.0-plugins-good \
+                        sudo xvfb
+
+ARG QGC_VERSION=v5.1.5
+RUN cd /tmp && \
+    wget -q https://github.com/mavlink/qgroundcontrol/releases/download/${QGC_VERSION}/QGroundControl-x86_64.AppImage -O qgc.AppImage && \
+    chmod +x qgc.AppImage && ./qgc.AppImage --appimage-extract > /dev/null && \
+    mv squashfs-root /opt/qgroundcontrol && rm qgc.AppImage && \
+    chmod -R a+rX /opt/qgroundcontrol && \
+    usermod -aG dialout,video ubuntu
+
+RUN printf '%s\n' '#!/bin/bash' \
+    '# Runs QGroundControl as the non-root user "ubuntu" (QGC exits when started as root)' \
+    '# A speech-dispatcher left by an earlier QGC (killed, or no audio output) can be deadlocked:' \
+    '# the new QGC then blocks connecting to it (black, frozen window). Clear it when no QGC runs.' \
+    'if ! pgrep -u ubuntu -x QGroundControl > /dev/null; then' \
+    '  pkill -9 -u ubuntu -f "^/usr/(bin/speech-dispatcher|lib/speech-dispatcher-modules/)"' \
+    'fi' \
+    'if [ "$(id -u)" -eq 0 ]; then' \
+    '  exec sudo -E -u ubuntu HOME=/home/ubuntu XDG_RUNTIME_DIR=/tmp/runtime-ubuntu DISPLAY="$DISPLAY" /opt/qgroundcontrol/AppRun "$@"' \
+    'fi' \
+    'exec /opt/qgroundcontrol/AppRun "$@"' > /usr/local/bin/qgroundcontrol && \
+    chmod +x /usr/local/bin/qgroundcontrol && \
+    mkdir -p /tmp/runtime-ubuntu && chown ubuntu:ubuntu /tmp/runtime-ubuntu && chmod 700 /tmp/runtime-ubuntu
+
+# ============================================================================
+# Pre-download the Gazebo Fuel models used by the outdoor worlds (cached in ~/.gz/fuel),
+# so the simulation does not depend on internet access at run time
+# ============================================================================
+RUN for model in "Oak tree" "Pine Tree" "House 1" "House 2" "House 3" "Collapsed House" "Lake House" \
+                 "Lamp Post" "Jersey Barrier" "Construction Cone" "Construction Barrel" "Water Tower" \
+                 "Pickup" "SUV" "Prius Hybrid" "Hatchback blue" "Bus" "Ambulance" "Fire truck" \
+                 "Rescue Randy" "Casual female" "Standing person" "Walking person" "Male visitor" \
+                 "Apartment" "Office Building" "Gas Station" "Cafe" "Post Office" "Fire Station" \
+                 "Radio Tower" "Telephone pole" "Mailbox" "Dumpster" "Fire hydrant" "Stop Sign" "Cardboard box"; do \
+        gz fuel download -v 3 -u "https://fuel.gazebosim.org/1.0/OpenRobotics/models/${model}" || exit 1; \
+    done
+
+# Holybro X500 meshes (frame, motors, propellers) from PX4-gazebo-models (BSD-3-Clause),
+# used by robot_description as model://x500_base/meshes/...
+ARG PX4_MODELS_COMMIT=e5997f455e33ec071c7c677fc59a65781de496a4
+RUN git clone --filter=blob:none --sparse https://github.com/PX4/PX4-gazebo-models.git /opt/px4_gazebo_models && \
+    cd /opt/px4_gazebo_models && git sparse-checkout set models/x500_base && git checkout ${PX4_MODELS_COMMIT} && \
+    rm -rf .git
+ENV GZ_SIM_RESOURCE_PATH=${GZ_SIM_RESOURCE_PATH}:/opt/px4_gazebo_models/models
+
+# Some Fuel models reference others by model:// URI (e.g. the bus and the fire truck use
+# model://suv/materials/...). The Fuel cache stores <name>/<version>/: expose the latest
+# version of every cached model as /opt/fuel_models/<name>
+RUN mkdir -p /opt/fuel_models && cd /root/.gz/fuel/fuel.gazebosim.org/openrobotics/models && \
+    for d in */; do d="${d%/}"; v=$(ls "$d" | sort -n | tail -1); ln -sfn "$PWD/$d/$v" "/opt/fuel_models/$d"; done
+ENV GZ_SIM_RESOURCE_PATH=${GZ_SIM_RESOURCE_PATH}:/opt/fuel_models
+
+# ============================================================================
+# Workspace (this folder is mounted at /ROS2_ardupilot/src by docker-compose)
+# ============================================================================
+RUN mkdir -p /ROS2_ardupilot/src
+COPY ./ /ROS2_ardupilot/src
+WORKDIR /ROS2_ardupilot
+
+RUN source /opt/ros/jazzy/setup.bash && \
+    rosdep init && \
+    rosdep update && \
+    rosdep install --from-paths src --ignore-src -y --rosdistro jazzy
+
+RUN /bin/bash -c "source /opt/ros/jazzy/setup.bash && colcon build --symlink-install"
+
+RUN echo "export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp" >> ~/.bashrc && \
+    echo "source /opt/ros/jazzy/setup.bash" >> ~/.bashrc && \
+    echo "source /ROS2_ardupilot/install/setup.bash" >> ~/.bashrc && \
+    echo "source /ROS2_ardupilot/src/scripts/drone_env.bash" >> ~/.bashrc

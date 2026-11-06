@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!-- =========================================================================
+  IMU used by the ArduPilotPlugin: gyro / accelerometer come from this sensor
+  and position / attitude / velocity from the pose of imu_link. It must be at
+  the centre of gravity. Sensor rotated 180 deg about x -> outputs in FRD
+  (ArduPilot body frame). Noise / bias / vibration are added by ArduPilot SITL
+  (SIM_ACC*, SIM_GYR*, SIM_VIB_* params, see flight_controller/config/ardupilot)
+  ========================================================================= -->
+<sdf version="1.9" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:macro name="IMU">
+    <link name="imu_link">
+      <xacro:inertial_diag mass="0.015" ixx="1e-5" iyy="1e-5" izz="1e-5"/>
+      <sensor name="imu_sensor" type="imu">
+        <gz_frame_id>imu_link</gz_frame_id>
+        <pose degrees="true">0 0 0 180 0 0</pose>
+        <always_on>1</always_on>
+        <update_rate>1000.0</update_rate>
+      </sensor>
+    </link>
+
+    <joint name="imu_joint" type="fixed">
+      <parent>base_link</parent>
+      <child>imu_link</child>
+    </joint>
+  </xacro:macro>
+
+</sdf>

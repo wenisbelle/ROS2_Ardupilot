@@ -1,0 +1,251 @@
+<?xml version="1.0"?>
+<!-- Two storey house 9 x 9 m, door facing +x -->
+<sdf version="1.9">
+  <model name="house_two_storey">
+    <static>true</static>
+    <link name="link">
+      <visual name="walls">
+        <pose>0 0 3.0 0 0 0</pose>
+        <geometry><box><size>9 9 6.0</size></box></geometry>
+        <material>
+          <ambient>0.93 0.93 0.9 1</ambient>
+          <diffuse>0.93 0.93 0.9 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.9</roughness></metal></pbr>
+        </material>
+      </visual>
+      <collision name="walls_collision">
+        <pose>0 0 3.0 0 0 0</pose>
+        <geometry><box><size>9 9 6.0</size></box></geometry>
+      </collision>
+      <visual name="roof_n">
+        <pose>0 2.250 7.575 -0.6107 0 0</pose>
+        <geometry><box><size>9.60 5.893 0.15</size></box></geometry>
+        <material>
+          <ambient>0.55 0.12 0.1 1</ambient>
+          <diffuse>0.55 0.12 0.1 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.7</roughness></metal></pbr>
+        </material>
+      </visual>
+      <collision name="roof_n_collision">
+        <pose>0 2.250 7.575 -0.6107 0 0</pose>
+        <geometry><box><size>9.60 5.893 0.15</size></box></geometry>
+      </collision>
+      <visual name="roof_s">
+        <pose>0 -2.250 7.575 0.6107 0 0</pose>
+        <geometry><box><size>9.60 5.893 0.15</size></box></geometry>
+        <material>
+          <ambient>0.55 0.12 0.1 1</ambient>
+          <diffuse>0.55 0.12 0.1 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.7</roughness></metal></pbr>
+        </material>
+      </visual>
+      <collision name="roof_s_collision">
+        <pose>0 -2.250 7.575 0.6107 0 0</pose>
+        <geometry><box><size>9.60 5.893 0.15</size></box></geometry>
+      </collision>
+      <visual name="gable_e">
+        <pose>4.500 0 7.525 0 0 0</pose>
+        <geometry><box><size>0.15 4.95 3.15</size></box></geometry>
+        <material>
+          <ambient>0.93 0.93 0.9 1</ambient>
+          <diffuse>0.93 0.93 0.9 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.9</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="gable_w">
+        <pose>-4.500 0 7.525 0 0 0</pose>
+        <geometry><box><size>0.15 4.95 3.15</size></box></geometry>
+        <material>
+          <ambient>0.93 0.93 0.9 1</ambient>
+          <diffuse>0.93 0.93 0.9 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.9</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="door">
+        <pose>4.520 0 1.05 0 0 0</pose>
+        <geometry><box><size>0.05 1.1 2.1</size></box></geometry>
+        <material>
+          <ambient>0.35 0.22 0.12 1</ambient>
+          <diffuse>0.35 0.22 0.12 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.8</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="chimney">
+        <pose>-2.25 1.80 9.15 0 0 0</pose>
+        <geometry><box><size>0.7 0.7 3.75</size></box></geometry>
+        <material>
+          <ambient>0.45 0.25 0.2 1</ambient>
+          <diffuse>0.45 0.25 0.2 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.9</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="win_e_0">
+        <pose>4.520 -3.00 1.50 0 0 0</pose>
+        <geometry><box><size>0.04 1.2 1.1</size></box></geometry>
+        <material>
+          <ambient>0.15 0.2 0.3 1</ambient>
+          <diffuse>0.15 0.2 0.3 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.4</metalness><roughness>0.1</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="win_e_1">
+        <pose>4.520 3.00 1.50 0 0 0</pose>
+        <geometry><box><size>0.04 1.2 1.1</size></box></geometry>
+        <material>
+          <ambient>0.15 0.2 0.3 1</ambient>
+          <diffuse>0.15 0.2 0.3 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.4</metalness><roughness>0.1</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="win_s_2">
+        <pose>-3.00 4.520 1.50 0 0 0</pose>
+        <geometry><box><size>1.2 0.04 1.1</size></box></geometry>
+        <material>
+          <ambient>0.15 0.2 0.3 1</ambient>
+          <diffuse>0.15 0.2 0.3 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.4</metalness><roughness>0.1</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="win_s_3">
+        <pose>-3.00 -4.520 1.50 0 0 0</pose>
+        <geometry><box><size>1.2 0.04 1.1</size></box></geometry>
+        <material>
+          <ambient>0.15 0.2 0.3 1</ambient>
+          <diffuse>0.15 0.2 0.3 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.4</metalness><roughness>0.1</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="win_s_4">
+        <pose>0.00 4.520 1.50 0 0 0</pose>
+        <geometry><box><size>1.2 0.04 1.1</size></box></geometry>
+        <material>
+          <ambient>0.15 0.2 0.3 1</ambient>
+          <diffuse>0.15 0.2 0.3 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.4</metalness><roughness>0.1</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="win_s_5">
+        <pose>0.00 -4.520 1.50 0 0 0</pose>
+        <geometry><box><size>1.2 0.04 1.1</size></box></geometry>
+        <material>
+          <ambient>0.15 0.2 0.3 1</ambient>
+          <diffuse>0.15 0.2 0.3 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.4</metalness><roughness>0.1</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="win_s_6">
+        <pose>3.00 4.520 1.50 0 0 0</pose>
+        <geometry><box><size>1.2 0.04 1.1</size></box></geometry>
+        <material>
+          <ambient>0.15 0.2 0.3 1</ambient>
+          <diffuse>0.15 0.2 0.3 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.4</metalness><roughness>0.1</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="win_s_7">
+        <pose>3.00 -4.520 1.50 0 0 0</pose>
+        <geometry><box><size>1.2 0.04 1.1</size></box></geometry>
+        <material>
+          <ambient>0.15 0.2 0.3 1</ambient>
+          <diffuse>0.15 0.2 0.3 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.4</metalness><roughness>0.1</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="win_e_8">
+        <pose>4.520 -3.00 4.30 0 0 0</pose>
+        <geometry><box><size>0.04 1.2 1.1</size></box></geometry>
+        <material>
+          <ambient>0.15 0.2 0.3 1</ambient>
+          <diffuse>0.15 0.2 0.3 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.4</metalness><roughness>0.1</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="win_e_9">
+        <pose>4.520 3.00 4.30 0 0 0</pose>
+        <geometry><box><size>0.04 1.2 1.1</size></box></geometry>
+        <material>
+          <ambient>0.15 0.2 0.3 1</ambient>
+          <diffuse>0.15 0.2 0.3 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.4</metalness><roughness>0.1</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="win_s_10">
+        <pose>-3.00 4.520 4.30 0 0 0</pose>
+        <geometry><box><size>1.2 0.04 1.1</size></box></geometry>
+        <material>
+          <ambient>0.15 0.2 0.3 1</ambient>
+          <diffuse>0.15 0.2 0.3 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.4</metalness><roughness>0.1</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="win_s_11">
+        <pose>-3.00 -4.520 4.30 0 0 0</pose>
+        <geometry><box><size>1.2 0.04 1.1</size></box></geometry>
+        <material>
+          <ambient>0.15 0.2 0.3 1</ambient>
+          <diffuse>0.15 0.2 0.3 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.4</metalness><roughness>0.1</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="win_s_12">
+        <pose>0.00 4.520 4.30 0 0 0</pose>
+        <geometry><box><size>1.2 0.04 1.1</size></box></geometry>
+        <material>
+          <ambient>0.15 0.2 0.3 1</ambient>
+          <diffuse>0.15 0.2 0.3 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.4</metalness><roughness>0.1</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="win_s_13">
+        <pose>0.00 -4.520 4.30 0 0 0</pose>
+        <geometry><box><size>1.2 0.04 1.1</size></box></geometry>
+        <material>
+          <ambient>0.15 0.2 0.3 1</ambient>
+          <diffuse>0.15 0.2 0.3 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.4</metalness><roughness>0.1</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="win_s_14">
+        <pose>3.00 4.520 4.30 0 0 0</pose>
+        <geometry><box><size>1.2 0.04 1.1</size></box></geometry>
+        <material>
+          <ambient>0.15 0.2 0.3 1</ambient>
+          <diffuse>0.15 0.2 0.3 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.4</metalness><roughness>0.1</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="win_s_15">
+        <pose>3.00 -4.520 4.30 0 0 0</pose>
+        <geometry><box><size>1.2 0.04 1.1</size></box></geometry>
+        <material>
+          <ambient>0.15 0.2 0.3 1</ambient>
+          <diffuse>0.15 0.2 0.3 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.4</metalness><roughness>0.1</roughness></metal></pbr>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

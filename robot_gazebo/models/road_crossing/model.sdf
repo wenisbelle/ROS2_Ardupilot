@@ -1,0 +1,143 @@
+<?xml version="1.0"?>
+<!-- 10 x 10 m intersection with zebra crossings (connects road_straight segments) -->
+<sdf version="1.9">
+  <model name="road_crossing">
+    <static>true</static>
+    <link name="link">
+      <visual name="asphalt">
+        <pose>0 0 0.01 0 0 0</pose>
+        <geometry><box><size>10 10 0.02</size></box></geometry>
+        <material>
+          <ambient>0.18 0.18 0.19 1</ambient>
+          <diffuse>0.18 0.18 0.19 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.95</roughness></metal></pbr>
+        </material>
+      </visual>
+      <collision name="asphalt_collision">
+        <pose>0 0 0.01 0 0 0</pose>
+        <geometry><box><size>10 10 0.02</size></box></geometry>
+      </collision>
+      <visual name="zebra_e_0">
+        <pose>4.2 -2.5 0.0205 0 0 0</pose>
+        <geometry><box><size>1.5 0.5 0.002</size></box></geometry>
+        <material>
+          <ambient>0.95 0.95 0.95 1</ambient>
+          <diffuse>0.95 0.95 0.95 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.6</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="zebra_w_0">
+        <pose>-4.2 -2.5 0.0205 0 0 0</pose>
+        <geometry><box><size>1.5 0.5 0.002</size></box></geometry>
+        <material>
+          <ambient>0.95 0.95 0.95 1</ambient>
+          <diffuse>0.95 0.95 0.95 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.6</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="zebra_e_1">
+        <pose>4.2 -1.5 0.0205 0 0 0</pose>
+        <geometry><box><size>1.5 0.5 0.002</size></box></geometry>
+        <material>
+          <ambient>0.95 0.95 0.95 1</ambient>
+          <diffuse>0.95 0.95 0.95 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.6</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="zebra_w_1">
+        <pose>-4.2 -1.5 0.0205 0 0 0</pose>
+        <geometry><box><size>1.5 0.5 0.002</size></box></geometry>
+        <material>
+          <ambient>0.95 0.95 0.95 1</ambient>
+          <diffuse>0.95 0.95 0.95 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.6</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="zebra_e_2">
+        <pose>4.2 -0.5 0.0205 0 0 0</pose>
+        <geometry><box><size>1.5 0.5 0.002</size></box></geometry>
+        <material>
+          <ambient>0.95 0.95 0.95 1</ambient>
+          <diffuse>0.95 0.95 0.95 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.6</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="zebra_w_2">
+        <pose>-4.2 -0.5 0.0205 0 0 0</pose>
+        <geometry><box><size>1.5 0.5 0.002</size></box></geometry>
+        <material>
+          <ambient>0.95 0.95 0.95 1</ambient>
+          <diffuse>0.95 0.95 0.95 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.6</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="zebra_e_3">
+        <pose>4.2 0.5 0.0205 0 0 0</pose>
+        <geometry><box><size>1.5 0.5 0.002</size></box></geometry>
+        <material>
+          <ambient>0.95 0.95 0.95 1</ambient>
+          <diffuse>0.95 0.95 0.95 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.6</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="zebra_w_3">
+        <pose>-4.2 0.5 0.0205 0 0 0</pose>
+        <geometry><box><size>1.5 0.5 0.002</size></box></geometry>
+        <material>
+          <ambient>0.95 0.95 0.95 1</ambient>
+          <diffuse>0.95 0.95 0.95 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.6</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="zebra_e_4">
+        <pose>4.2 1.5 0.0205 0 0 0</pose>
+        <geometry><box><size>1.5 0.5 0.002</size></box></geometry>
+        <material>
+          <ambient>0.95 0.95 0.95 1</ambient>
+          <diffuse>0.95 0.95 0.95 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.6</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="zebra_w_4">
+        <pose>-4.2 1.5 0.0205 0 0 0</pose>
+        <geometry><box><size>1.5 0.5 0.002</size></box></geometry>
+        <material>
+          <ambient>0.95 0.95 0.95 1</ambient>
+          <diffuse>0.95 0.95 0.95 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.6</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="zebra_e_5">
+        <pose>4.2 2.5 0.0205 0 0 0</pose>
+        <geometry><box><size>1.5 0.5 0.002</size></box></geometry>
+        <material>
+          <ambient>0.95 0.95 0.95 1</ambient>
+          <diffuse>0.95 0.95 0.95 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.6</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="zebra_w_5">
+        <pose>-4.2 2.5 0.0205 0 0 0</pose>
+        <geometry><box><size>1.5 0.5 0.002</size></box></geometry>
+        <material>
+          <ambient>0.95 0.95 0.95 1</ambient>
+          <diffuse>0.95 0.95 0.95 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.6</roughness></metal></pbr>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

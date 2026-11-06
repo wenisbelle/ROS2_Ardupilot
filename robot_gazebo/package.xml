@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>robot_gazebo</name>
+  <version>0.1.0</version>
+  <description>Outdoor Gazebo Sim (Harmonic) worlds for ArduPilot drones, drone spawn, ROS-Gazebo bridge and wind tool</description>
+  <maintainer email="marinathonda@gmail.com">wenis</maintainer>
+  <license>BSD-3-Clause</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <buildtool_depend>ament_cmake_python</buildtool_depend>
+
+  <depend>rclcpp</depend>
+  <depend>rosgraph_msgs</depend>
+  <depend>gz_transport_vendor</depend>
+  <depend>gz_msgs_vendor</depend>
+
+  <exec_depend>robot_description</exec_depend>
+  <exec_depend>ros_gz_sim</exec_depend>
+  <exec_depend>ros_gz_bridge</exec_depend>
+  <exec_depend>xacro</exec_depend>
+  <exec_depend>python3-yaml</exec_depend>
+
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

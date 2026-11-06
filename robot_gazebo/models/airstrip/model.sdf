@@ -1,0 +1,313 @@
+<?xml version="1.0"?>
+<!-- 300 x 20 m airstrip along x -->
+<sdf version="1.9">
+  <model name="airstrip">
+    <static>true</static>
+    <link name="link">
+      <visual name="asphalt">
+        <pose>0 0 0.01 0 0 0</pose>
+        <geometry><box><size>300 20 0.02</size></box></geometry>
+        <material>
+          <ambient>0.18 0.18 0.19 1</ambient>
+          <diffuse>0.18 0.18 0.19 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.95</roughness></metal></pbr>
+        </material>
+      </visual>
+      <collision name="asphalt_collision">
+        <pose>0 0 0.01 0 0 0</pose>
+        <geometry><box><size>300 20 0.02</size></box></geometry>
+      </collision>
+      <visual name="centre_0">
+        <pose>-140 0 0.0205 0 0 0</pose>
+        <geometry><box><size>10 0.4 0.002</size></box></geometry>
+        <material>
+          <ambient>0.95 0.95 0.95 1</ambient>
+          <diffuse>0.95 0.95 0.95 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.6</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="centre_20">
+        <pose>-120 0 0.0205 0 0 0</pose>
+        <geometry><box><size>10 0.4 0.002</size></box></geometry>
+        <material>
+          <ambient>0.95 0.95 0.95 1</ambient>
+          <diffuse>0.95 0.95 0.95 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.6</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="centre_40">
+        <pose>-100 0 0.0205 0 0 0</pose>
+        <geometry><box><size>10 0.4 0.002</size></box></geometry>
+        <material>
+          <ambient>0.95 0.95 0.95 1</ambient>
+          <diffuse>0.95 0.95 0.95 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.6</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="centre_60">
+        <pose>-80 0 0.0205 0 0 0</pose>
+        <geometry><box><size>10 0.4 0.002</size></box></geometry>
+        <material>
+          <ambient>0.95 0.95 0.95 1</ambient>
+          <diffuse>0.95 0.95 0.95 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.6</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="centre_80">
+        <pose>-60 0 0.0205 0 0 0</pose>
+        <geometry><box><size>10 0.4 0.002</size></box></geometry>
+        <material>
+          <ambient>0.95 0.95 0.95 1</ambient>
+          <diffuse>0.95 0.95 0.95 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.6</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="centre_100">
+        <pose>-40 0 0.0205 0 0 0</pose>
+        <geometry><box><size>10 0.4 0.002</size></box></geometry>
+        <material>
+          <ambient>0.95 0.95 0.95 1</ambient>
+          <diffuse>0.95 0.95 0.95 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.6</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="centre_120">
+        <pose>-20 0 0.0205 0 0 0</pose>
+        <geometry><box><size>10 0.4 0.002</size></box></geometry>
+        <material>
+          <ambient>0.95 0.95 0.95 1</ambient>
+          <diffuse>0.95 0.95 0.95 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.6</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="centre_140">
+        <pose>0 0 0.0205 0 0 0</pose>
+        <geometry><box><size>10 0.4 0.002</size></box></geometry>
+        <material>
+          <ambient>0.95 0.95 0.95 1</ambient>
+          <diffuse>0.95 0.95 0.95 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.6</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="centre_160">
+        <pose>20 0 0.0205 0 0 0</pose>
+        <geometry><box><size>10 0.4 0.002</size></box></geometry>
+        <material>
+          <ambient>0.95 0.95 0.95 1</ambient>
+          <diffuse>0.95 0.95 0.95 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.6</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="centre_180">
+        <pose>40 0 0.0205 0 0 0</pose>
+        <geometry><box><size>10 0.4 0.002</size></box></geometry>
+        <material>
+          <ambient>0.95 0.95 0.95 1</ambient>
+          <diffuse>0.95 0.95 0.95 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.6</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="centre_200">
+        <pose>60 0 0.0205 0 0 0</pose>
+        <geometry><box><size>10 0.4 0.002</size></box></geometry>
+        <material>
+          <ambient>0.95 0.95 0.95 1</ambient>
+          <diffuse>0.95 0.95 0.95 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.6</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="centre_220">
+        <pose>80 0 0.0205 0 0 0</pose>
+        <geometry><box><size>10 0.4 0.002</size></box></geometry>
+        <material>
+          <ambient>0.95 0.95 0.95 1</ambient>
+          <diffuse>0.95 0.95 0.95 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.6</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="centre_240">
+        <pose>100 0 0.0205 0 0 0</pose>
+        <geometry><box><size>10 0.4 0.002</size></box></geometry>
+        <material>
+          <ambient>0.95 0.95 0.95 1</ambient>
+          <diffuse>0.95 0.95 0.95 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.6</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="centre_260">
+        <pose>120 0 0.0205 0 0 0</pose>
+        <geometry><box><size>10 0.4 0.002</size></box></geometry>
+        <material>
+          <ambient>0.95 0.95 0.95 1</ambient>
+          <diffuse>0.95 0.95 0.95 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.6</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="centre_280">
+        <pose>140 0 0.0205 0 0 0</pose>
+        <geometry><box><size>10 0.4 0.002</size></box></geometry>
+        <material>
+          <ambient>0.95 0.95 0.95 1</ambient>
+          <diffuse>0.95 0.95 0.95 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.6</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="edge_s">
+        <pose>0 -9.5 0.0205 0 0 0</pose>
+        <geometry><box><size>300 0.3 0.002</size></box></geometry>
+        <material>
+          <ambient>0.95 0.95 0.95 1</ambient>
+          <diffuse>0.95 0.95 0.95 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.6</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="edge_n">
+        <pose>0 9.5 0.0205 0 0 0</pose>
+        <geometry><box><size>300 0.3 0.002</size></box></geometry>
+        <material>
+          <ambient>0.95 0.95 0.95 1</ambient>
+          <diffuse>0.95 0.95 0.95 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.6</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="threshold_w_0">
+        <pose>-145 -6.6000000000000005 0.0205 0 0 0</pose>
+        <geometry><box><size>6 1.2 0.002</size></box></geometry>
+        <material>
+          <ambient>0.95 0.95 0.95 1</ambient>
+          <diffuse>0.95 0.95 0.95 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.6</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="threshold_w_1">
+        <pose>-145 -4.4 0.0205 0 0 0</pose>
+        <geometry><box><size>6 1.2 0.002</size></box></geometry>
+        <material>
+          <ambient>0.95 0.95 0.95 1</ambient>
+          <diffuse>0.95 0.95 0.95 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.6</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="threshold_w_2">
+        <pose>-145 -2.2 0.0205 0 0 0</pose>
+        <geometry><box><size>6 1.2 0.002</size></box></geometry>
+        <material>
+          <ambient>0.95 0.95 0.95 1</ambient>
+          <diffuse>0.95 0.95 0.95 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.6</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="threshold_w_4">
+        <pose>-145 2.2 0.0205 0 0 0</pose>
+        <geometry><box><size>6 1.2 0.002</size></box></geometry>
+        <material>
+          <ambient>0.95 0.95 0.95 1</ambient>
+          <diffuse>0.95 0.95 0.95 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.6</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="threshold_w_5">
+        <pose>-145 4.4 0.0205 0 0 0</pose>
+        <geometry><box><size>6 1.2 0.002</size></box></geometry>
+        <material>
+          <ambient>0.95 0.95 0.95 1</ambient>
+          <diffuse>0.95 0.95 0.95 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.6</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="threshold_w_6">
+        <pose>-145 6.6000000000000005 0.0205 0 0 0</pose>
+        <geometry><box><size>6 1.2 0.002</size></box></geometry>
+        <material>
+          <ambient>0.95 0.95 0.95 1</ambient>
+          <diffuse>0.95 0.95 0.95 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.6</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="threshold_e_0">
+        <pose>145 -6.6000000000000005 0.0205 0 0 0</pose>
+        <geometry><box><size>6 1.2 0.002</size></box></geometry>
+        <material>
+          <ambient>0.95 0.95 0.95 1</ambient>
+          <diffuse>0.95 0.95 0.95 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.6</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="threshold_e_1">
+        <pose>145 -4.4 0.0205 0 0 0</pose>
+        <geometry><box><size>6 1.2 0.002</size></box></geometry>
+        <material>
+          <ambient>0.95 0.95 0.95 1</ambient>
+          <diffuse>0.95 0.95 0.95 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.6</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="threshold_e_2">
+        <pose>145 -2.2 0.0205 0 0 0</pose>
+        <geometry><box><size>6 1.2 0.002</size></box></geometry>
+        <material>
+          <ambient>0.95 0.95 0.95 1</ambient>
+          <diffuse>0.95 0.95 0.95 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.6</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="threshold_e_4">
+        <pose>145 2.2 0.0205 0 0 0</pose>
+        <geometry><box><size>6 1.2 0.002</size></box></geometry>
+        <material>
+          <ambient>0.95 0.95 0.95 1</ambient>
+          <diffuse>0.95 0.95 0.95 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.6</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="threshold_e_5">
+        <pose>145 4.4 0.0205 0 0 0</pose>
+        <geometry><box><size>6 1.2 0.002</size></box></geometry>
+        <material>
+          <ambient>0.95 0.95 0.95 1</ambient>
+          <diffuse>0.95 0.95 0.95 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.6</roughness></metal></pbr>
+        </material>
+      </visual>
+      <visual name="threshold_e_6">
+        <pose>145 6.6000000000000005 0.0205 0 0 0</pose>
+        <geometry><box><size>6 1.2 0.002</size></box></geometry>
+        <material>
+          <ambient>0.95 0.95 0.95 1</ambient>
+          <diffuse>0.95 0.95 0.95 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr><metal><metalness>0.0</metalness><roughness>0.6</roughness></metal></pbr>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

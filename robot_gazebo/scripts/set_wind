@@ -1,0 +1,80 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""Sets the wind of the running Gazebo world (WindEffects system).
+
+  ros2 run robot_gazebo set_wind --speed 6 --from 270      # 6 m/s wind FROM the West
+  ros2 run robot_gazebo set_wind --speed 0                  # calm
+
+--from follows the meteorological convention (direction the wind comes FROM,
+degrees clockwise from North). Gusts / turbulence around the mean value are
+configured in the world file (WindEffects <horizontal>/<vertical>).
+The wind pushes the drones (enable_wind on base_link); ArduPilot sees it only
+through its effect on the vehicle, exactly as on the real drone.
+"""
+import argparse
+import math
+import re
+import subprocess
+import sys
+import time
+
+
+def wind_applied(world, vx, vy):
+    """Reads the wind seed back from the WindEffects system (/world/<w>/wind_info)."""
+    out = subprocess.run(['gz', 'service', '-s', f'/world/{world}/wind_info', '--reqtype', 'gz.msgs.Empty',
+                          '--reptype', 'gz.msgs.Wind', '--timeout', '1000', '--req', ''],
+                         capture_output=True, text=True, timeout=5).stdout
+    if 'enable_wind: true' not in out:
+        return False
+    vals = {k: float(v) for k, v in re.findall(r'\b([xy]): ([-0-9.e]+)', out)}
+    return abs(vals.get('x', 0.0) - vx) < 0.01 and abs(vals.get('y', 0.0) - vy) < 0.01
+
+
+def find_world():
+    out = subprocess.run(['gz', 'topic', '-l'], capture_output=True, text=True, timeout=10).stdout
+    for line in out.splitlines():
+        m = re.match(r'^/world/([^/]+)/clock$', line.strip())
+        if m:
+            return m.group(1)
+    return None
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument('-s', '--speed', type=float, required=True, help='mean wind speed [m/s]')
+    parser.add_argument('-d', '--from', dest='from_deg', type=float, default=0.0,
+                        help='direction the wind comes FROM [deg, clockwise from North]')
+    parser.add_argument('-z', '--vertical', type=float, default=0.0, help='vertical wind [m/s, up +]')
+    parser.add_argument('-w', '--world', default=None, help='world name (auto-detected)')
+    parser.add_argument('--wait', type=float, default=30.0, help='seconds to wait for a running world')
+    args, _ = parser.parse_known_args()
+
+    world = args.world
+    t0 = time.monotonic()
+    while not world and time.monotonic() - t0 < args.wait:
+        world = find_world()
+        if not world:
+            time.sleep(1.0)
+    if not world:
+        print('No running Gazebo world found (gz topic -l).', file=sys.stderr)
+        return 1
+
+    # wind blows TOWARDS from + 180 deg. ENU: x = East, y = North
+    to = math.radians(args.from_deg + 180.0)
+    vx = args.speed * math.sin(to)
+    vy = args.speed * math.cos(to)
+    msg = f'linear_velocity: {{x: {vx:.3f}, y: {vy:.3f}, z: {args.vertical:.3f}}}, enable_wind: true'
+    # `gz topic -p` publishes once and exits: repeat until the world reports the new wind
+    for _ in range(10):
+        subprocess.run(['gz', 'topic', '-t', f'/world/{world}/wind', '-m', 'gz.msgs.Wind', '-p', msg], check=True)
+        if wind_applied(world, vx, vy):
+            print(f'[{world}] wind {args.speed:.1f} m/s from {args.from_deg:.0f} deg -> '
+                  f'ENU velocity ({vx:.2f}, {vy:.2f}, {args.vertical:.2f}) m/s')
+            return 0
+        time.sleep(0.3)
+    print(f'[{world}] the world did not confirm the wind (is the WindEffects system in the world?)', file=sys.stderr)
+    return 1
+
+
+if __name__ == '__main__':
+    sys.exit(main())
